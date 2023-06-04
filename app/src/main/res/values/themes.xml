@@ -37,6 +37,13 @@
 
     </style>
 
+    <style name="busqueda2">
+        <item name="android:backgroundTint">@color/orange</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+
+    </style>
+
     <style name="menu">
         <item name="android:backgroundTint">@color/orange</item>
         <item name="android:textSize">30sp</item>
@@ -47,5 +54,25 @@
     <style name="Binding_Title">
         <item name="android:textColor">@color/title_binding</item>
     </style>
+
+    <style name="SearchInput">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+
+
+    <style name="ButtonsGeneral">
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:backgroundTint">@color/orange</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+
+    <style name="ButtonCancel" parent="ButtonsGeneral">
+        <item name="android:backgroundTint">@color/rojito</item>
+    </style>
+
 
 </resources>

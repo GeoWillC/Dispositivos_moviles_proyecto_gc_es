@@ -6,73 +6,71 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/black"
-    tools:context=".MainActivity">
+    tools:context=".ui.activities.MainActivity">
+
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView2"
         style="@style/textTitle"
-        android:layout_width="397dp"
-        android:layout_height="118dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="36dp"
-        android:fontFamily="@font/satisfy"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/amarillo"
         android:gravity="left"
-        android:text="@string/palabra1"
+        android:text="@string/app_name_pantalla"
+        android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
-        style="@style/botonEstilo"
+        android:id="@+id/btn_login"
+        style="@style/ButtonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginTop="252dp"
-        android:text="@string/pepe"
-        app:layout_constraintStart_toStartOf="@+id/button2"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/button2"
-        style="@style/botonEstilo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginTop="252dp"
-        android:text="Button"
+        android:layout_marginStart="152dp"
+        android:layout_marginTop="328dp"
+        android:text="Login"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
         tools:ignore="MissingConstraints" />
 
-    <TextView
-        android:id="@+id/buscar"
-        style="@style/busqueda"
-        android:layout_width="284dp"
-        android:layout_height="77dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/black"
-        android:gravity="center"
-        android:text="Search..."
+    <EditText
+        android:id="@+id/txt_user"
+        style="@style/SearchInput"
+
+        android:layout_width="221dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="104dp"
+
+        android:backgroundTint="@color/search_bg"
+        android:hint="User name"
+        android:padding="8dp"
         android:textColor="@color/white"
+
+        android:textColorHint="@color/low_gray"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="74dp"
-        android:layout_height="82dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="#FF5722"
-        android:text="Search..."
-        app:layout_constraintStart_toEndOf="@+id/buscar"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:srcCompat="@drawable/settings" />
+    <EditText
+        android:id="@+id/txt_password"
+        style="@style/SearchInput"
+        android:layout_width="221dp"
+        android:layout_height="46dp"
+
+        android:layout_marginTop="48dp"
+        android:backgroundTint="@color/search_bg"
+        android:hint="Password"
+
+        android:padding="8dp"
+        android:textColor="@color/white"
+        android:textColorHint="@color/low_gray"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_user" />
 
 
-
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
