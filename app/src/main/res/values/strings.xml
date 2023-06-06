@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Dispositivos_moviles_proyecto_gc_es1</string>
+    <string name="saludo">¡Hola! Es bieno verte nuevamente</string>
+    <string name="pepe">Cancelar</string>
+    <string name="palabra1">Fast and delicious food</string>
+    <string name="app_binding_name">Servicios a ofrecer</string>
+    <string name="title_activity_main_binding">ActivityMainBinding</string>
+    <string name="app_name_pantalla">Fast and Delicious Food</string>
+    <string name="app_name_pantalla2">Pedidos Online</string>
+    <string name="correo">Correo</string>
+    <string name="contraseña">Contraseña</string>
+    <string name="redes_sociales">O conéctese usando lasa redes sóciales</string>
+
+</resources>
