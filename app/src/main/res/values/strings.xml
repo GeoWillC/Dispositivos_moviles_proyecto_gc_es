@@ -10,5 +10,8 @@
     <string name="correo">Correo</string>
     <string name="contraseña">Contraseña</string>
     <string name="redes_sociales">O conéctese usando lasa redes sóciales</string>
+    <string name="menu_home">Home</string>
+    <string name="menu_favs">Favs</string>
+    <string name="menu_chatgpt">ChatGPT</string>
 
 </resources>

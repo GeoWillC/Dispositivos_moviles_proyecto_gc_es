@@ -3,10 +3,12 @@
     <style name="Base.Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:backgroundTint">@color/fondo2</item>
+
     </style>
 
     <style name="Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Base.Theme.Dispositivos_moviles_proyecto_gc_es1">
-        <item name="android:backgroundTint">@color/fondo2</item>
+
         <item name="android:textColor">@color/low_gray</item>
         <item name="android:textSize">50sp</item>
     </style>
@@ -108,7 +110,10 @@
 
 
     </style>
-
+    <style name="box" >
+        <item name="android:background">@color/black</item>
+        <item name="android:textColor">@color/rojito</item>
+    </style>
 
 
 </resources>
