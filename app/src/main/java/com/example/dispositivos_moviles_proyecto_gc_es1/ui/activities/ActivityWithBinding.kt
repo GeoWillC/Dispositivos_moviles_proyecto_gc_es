@@ -1,6 +1,7 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -75,7 +76,7 @@ class ActivityWithBinding : AppCompatActivity() {
                         suma += i
                     }
 
-                    Snackbar.make(binding.cuadroMensaje, "La suma es ${suma}", Snackbar.LENGTH_LONG)
+                    Snackbar.make(binding.titulo, "La suma es ${suma}", Snackbar.LENGTH_LONG).setTextColor(Color.RED).setBackgroundTint(Color.BLUE)
                         .show()
 
                     true
@@ -88,7 +89,9 @@ class ActivityWithBinding : AppCompatActivity() {
                         suma += i
                     }
 
-                    Snackbar.make(binding.cuadroMensaje, "La suma es ${suma}", Snackbar.LENGTH_LONG)
+
+
+                    Snackbar.make(binding.titulo, "La suma es ${suma}", Snackbar.LENGTH_LONG).setTextColor(Color.RED)
                         .show()
 
 

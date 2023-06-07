@@ -5,9 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.ActivityWithBinding">
-
-
+    tools:context=".ui.activities.ActivityWithBinding"
+    >
 
     <TextView
         android:id="@+id/titulo"
@@ -42,32 +41,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo" />
 
+
     <ImageButton
         android:id="@+id/imageButton2"
-        android:layout_width="66dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="46dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
         android:backgroundTint="@color/orange"
         android:src="@drawable/settings"
         app:layout_constraintStart_toEndOf="@+id/autoCompleteTextView"
         app:layout_constraintTop_toBottomOf="@+id/titulo" />
-
-    <TextView
-        android:id="@+id/cuadroMensaje"
-        style="@style/Animation.Design.BottomSheetDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="40sp"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
