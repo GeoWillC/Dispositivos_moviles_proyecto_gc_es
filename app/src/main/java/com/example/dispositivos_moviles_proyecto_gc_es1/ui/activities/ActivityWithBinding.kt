@@ -1,19 +1,20 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import android.content.Intent
-import android.graphics.Color
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityWithBindingBinding
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FirstFragment
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.SecondFragment
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.ThirdFragment
 import com.google.android.material.snackbar.Snackbar
 
 class ActivityWithBinding : AppCompatActivity() {
 
     private lateinit var binding: ActivityWithBindingBinding
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityWithBindingBinding.inflate(layoutInflater)
@@ -26,9 +27,9 @@ class ActivityWithBinding : AppCompatActivity() {
         var name: String = ""
 
         // De esta forma accedemos a los contenidos enviados por otra Activity
-       // intent.extras.let {
-            // it? significa que este item/objeto puede ser nulo
-         //   name = it?.getString("var1")!!
+        // intent.extras.let {
+        // it? significa que este item/objeto puede ser nulo
+        //   name = it?.getString("var1")!!
         //}
         Log.d("UCE", "Hola $name")
 
@@ -41,28 +42,22 @@ class ActivityWithBinding : AppCompatActivity() {
 
         }
          */
-
         Log.d("UCE", "Entrando a Start")
         super.onStart()
         initClass()
-
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
     }
 
-
     fun initClass() {
         binding.imageButton2.setOnClickListener {
-
             // Asi se define un intent y se menciona a que Activity se trasladara
             var intent = Intent(
                 this,
                 MainActivity::class.java
             )
-
             // Con esto iniciamos el otro Activity
             startActivity(intent)
 
@@ -70,44 +65,31 @@ class ActivityWithBinding : AppCompatActivity() {
         binding.bottomNavigation.setOnItemReselectedListener { item ->
             when (item.itemId) {
                 R.id.inicio -> {
-                    // Respond to navigation item 1 click
-                    var suma = 0
-                    for (i in 1..10) {
-                        suma += i
-                    }
-
-                    Snackbar.make(binding.titulo, "La suma es ${suma}", Snackbar.LENGTH_LONG).setTextColor(Color.RED).setBackgroundTint(Color.BLUE)
-                        .show()
-
-                    true
+                    var frag = FirstFragment();
+                    val trans = supportFragmentManager.beginTransaction()
+                    trans.replace(binding.frContainer.id, frag)
+                    trans.addToBackStack(null)
+                    trans.commit()
                 }
 
                 R.id.favorito -> {
                     // Respond to navigation item 2 click
-                    var suma = 0
-                    for (i in listOf<Int>(1, 2, 3)) {
-                        suma += i
-                    }
+                    var frag = SecondFragment();
+                    val trans = supportFragmentManager.beginTransaction()
+                    trans.replace(binding.frContainer.id, frag)
+                    trans.addToBackStack(null)
+                    trans.commit()
 
-
-
-                    Snackbar.make(binding.titulo, "La suma es ${suma}", Snackbar.LENGTH_LONG).setTextColor(Color.RED)
-                        .show()
-
-
-                    true
                 }
-
                 R.id.chat -> {
-                    // Respond to navigation item 2 click
-                    true
+                    // Respond to navigation item 3 click
+                    var frag = ThirdFragment();
+                    val trans = supportFragmentManager.beginTransaction()
+                    trans.replace(binding.frContainer.id, frag)
+                    trans.addToBackStack(null)
+                    trans.commit()
                 }
-
-                else -> false
             }
-
         }
-
-
     }
 }
