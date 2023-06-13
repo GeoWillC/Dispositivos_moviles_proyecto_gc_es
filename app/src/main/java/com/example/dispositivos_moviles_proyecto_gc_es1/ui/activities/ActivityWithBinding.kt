@@ -44,6 +44,11 @@ class ActivityWithBinding : AppCompatActivity() {
          */
         Log.d("UCE", "Entrando a Start")
         super.onStart()
+        ManagerFragment().replaceFragment(
+            supportFragmentManager,
+            binding.frContainer.id,
+            FirstFragment()
+        )
         initClass()
     }
 
@@ -62,23 +67,30 @@ class ActivityWithBinding : AppCompatActivity() {
             startActivity(intent)
 
         }
-        binding.bottomNavigation.setOnItemReselectedListener { item ->
+        binding.bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.inicio -> {
-                    var frag = FirstFragment();
-                    val trans = supportFragmentManager.beginTransaction()
-                    trans.replace(binding.frContainer.id, frag)
-                    trans.addToBackStack(null)
-                    trans.commit()
+                    ManagerFragment().replaceFragment(
+                        supportFragmentManager,
+                        binding.frContainer.id,
+                        FirstFragment()
+                    )
+                    true
                 }
 
                 R.id.favorito -> {
                     // Respond to navigation item 2 click
 
-                    ManagerFragment().replaceFragment(supportFragmentManager, binding.frContainer.id, SecondFragment())
+                    ManagerFragment().replaceFragment(
+                        supportFragmentManager,
+                        binding.frContainer.id,
+                        SecondFragment()
+                    )
+                    true
 
 
                 }
+
                 R.id.chat -> {
                     // Respond to navigation item 3 click
                     var frag = ThirdFragment();
@@ -86,11 +98,15 @@ class ActivityWithBinding : AppCompatActivity() {
                     trans.replace(binding.frContainer.id, frag)
                     trans.addToBackStack(null)
                     trans.commit()
+                    true
                 }
+
+                else -> {false}
             }
         }
 
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
     }
