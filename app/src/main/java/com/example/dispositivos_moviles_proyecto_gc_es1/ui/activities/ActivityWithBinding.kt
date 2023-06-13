@@ -10,7 +10,7 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityWith
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FirstFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.SecondFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.ThirdFragment
-import com.google.android.material.snackbar.Snackbar
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.ManagerFragment
 
 class ActivityWithBinding : AppCompatActivity() {
 
@@ -74,11 +74,9 @@ class ActivityWithBinding : AppCompatActivity() {
 
                 R.id.favorito -> {
                     // Respond to navigation item 2 click
-                    var frag = SecondFragment();
-                    val trans = supportFragmentManager.beginTransaction()
-                    trans.replace(binding.frContainer.id, frag)
-                    trans.addToBackStack(null)
-                    trans.commit()
+
+                    ManagerFragment().replaceFragment(supportFragmentManager, binding.frContainer.id, SecondFragment())
+
 
                 }
                 R.id.chat -> {
@@ -91,5 +89,10 @@ class ActivityWithBinding : AppCompatActivity() {
                 }
             }
         }
+
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+    }
+
 }
