@@ -1,6 +1,7 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment
 
 import android.app.LauncherActivity.ListItem
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +16,8 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.ListItems
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.MainActivity
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
 
 // TODO: Rename parameter arguments, choose names that match
@@ -47,15 +50,29 @@ class FirstFragment : Fragment() {
         val adapter= ArrayAdapter<String>(requireActivity(), R.layout.simple_layout , list)
         binding.spinner.adapter=adapter
         //binding.listView.adapter=adapter
+        chargeDataRv()
+        //Cuando se hace swipe es para hacer la carga de de datos
+        binding.rvSwipe.setOnRefreshListener {
+            chargeDataRv()
+            binding.rvSwipe.isRefreshing=false
+        }
 
 
-        var rvAdapter=MarvelAdapter(ListItems().retornarHeroes())
+    }
+    fun sendMarvelItem(item:Heroes){
+        val i= Intent(requireActivity(), DetailsMarvelItem::class.java)
+        i.putExtra("heroe" , item)
+    //proceso de pasar de un objeto a un string para poderlo transmitir por la web
+        startActivity(i)
+    }
+
+    fun chargeDataRv(){
+        var rvAdapter=MarvelAdapter(ListItems().retornarHeroes(), {sendMarvelItem(it)})
         val rvMarvel=binding.rvMarvelChars
         rvMarvel.adapter= rvAdapter
         rvMarvel.layoutManager=LinearLayoutManager(requireActivity(),
             LinearLayoutManager.VERTICAL,false)
         //false es el orden default true es inverso
-
 
     }
 }

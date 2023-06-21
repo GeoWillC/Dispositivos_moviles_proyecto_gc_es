@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" >
-
-    <!--Permisos para acceso a contenido multimedia, puede ser riesgoso pal usuario-->
-    <!--accesos a internet no requiere permiso, para descargar la img-->
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Permisos para acceso a contenido multimedia, puede ser riesgoso pal usuario -->
+    <!-- accesos a internet no requiere permiso, para descargar la img -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dispositivos_moviles_proyecto_gc_es1"
         tools:targetApi="31" >
+        <activity
+            android:name=".ui.activities.DetailsMarvelItem"
+            android:exported="false" />
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="false" />

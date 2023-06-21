@@ -1,15 +1,19 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.logic.list
 
-data class Heroes(var id: Int, var heroe: String, var comic: String, var img: String) {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-}
+@Parcelize
+data class Heroes(var id: Int, var heroe: String, var comic: String, var img: String): Parcelable
+
+
 class ListItems{
     fun retornarHeroes(): List<Heroes> {
         val items = listOf(
             Heroes(
                 1,
                 "Deadpool",
-                "Deadpool",
+                "Deadpool Comic",
                 "https://comicvine.gamespot.com/a/uploads/scale_small/12/124259/8926324-large-2680196.jpg"
             ),
 
