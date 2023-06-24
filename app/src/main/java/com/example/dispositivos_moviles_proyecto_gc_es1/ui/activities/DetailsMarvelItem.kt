@@ -30,8 +30,10 @@ class DetailsMarvelItem : AppCompatActivity() {
 
 
         if(item != null){
-            binding.txtName.text=item.heroe
+            binding.txtName.text="Nombre de heroe: "+item.heroe
             binding.txtComic.text=item.comic
+            binding.txtNombre.text="Nombre verdadero: "+item.nombre
+            binding.txtAnio.text="Año de publicación "+item.anio.toString()
 
             Picasso.get().load(item.img).into(binding.imgMarvel)
         }

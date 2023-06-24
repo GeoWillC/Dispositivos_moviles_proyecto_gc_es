@@ -3,6 +3,8 @@ package com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment
 import android.app.LauncherActivity.ListItem
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Scene
+import android.transition.Transition
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,8 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.ListItems
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.MainActivity
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
+import kotlinx.coroutines.NonDisposableHandle.parent
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +35,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FirstFragment : Fragment() {
+
 
     private lateinit var binding: FragmentFirstBinding
 
@@ -56,8 +61,6 @@ class FirstFragment : Fragment() {
             chargeDataRv()
             binding.rvSwipe.isRefreshing=false
         }
-
-
     }
     fun sendMarvelItem(item:Heroes){
         val i= Intent(requireActivity(), DetailsMarvelItem::class.java)
@@ -73,6 +76,5 @@ class FirstFragment : Fragment() {
         rvMarvel.layoutManager=LinearLayoutManager(requireActivity(),
             LinearLayoutManager.VERTICAL,false)
         //false es el orden default true es inverso
-
     }
 }
