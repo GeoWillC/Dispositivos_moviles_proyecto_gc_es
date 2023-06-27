@@ -7,8 +7,8 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
 class JikanAnimeLogic {
 
     suspend fun getAllAnimes(): List<Heroes> {
-        var call = ApiConnection.getJikanConnection()
-        val response = call.create(JikanEndpoint::class.java).getAllAnimes()
+        var response = ApiConnection.getService(ApiConnection.typeApi.Jikan, JikanEndpoint::class.java).getAllAnimes()
+        //val response = call.create(JikanEndpoint::class.java).getAllAnimes()
         val itemList = arrayListOf<Heroes>()
 
         if (response.isSuccessful) {

@@ -20,6 +20,7 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirs
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.jikanLogic.JikanAnimeLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.ListItems
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.MainActivity
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
@@ -79,7 +80,8 @@ class FirstFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
             var rvAdapter = MarvelAdapter(
                 //Se detiene en la linea 83 debe haber un dato que no soparta
-                JikanAnimeLogic().getAllAnimes()
+                //JikanAnimeLogic().getAllAnimes()
+                MarvelLogic().getMarvelCharacters("spi", 8)
 
             //JikanAnimeLogic.
             ) { sendMarvelItem(it) }
