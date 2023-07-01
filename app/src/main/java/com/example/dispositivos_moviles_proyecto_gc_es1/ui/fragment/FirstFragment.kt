@@ -14,6 +14,7 @@ import android.widget.LinearLayout
 import android.widget.SimpleAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
@@ -44,6 +45,10 @@ class FirstFragment : Fragment() {
 
 
     private lateinit var binding: FragmentFirstBinding
+    private lateinit var lmanager:LinearLayoutManager
+    private var rvAdapter: MarvelAdapter =
+        MarvelAdapter { sendMarvelItem(it) }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +56,14 @@ class FirstFragment : Fragment() {
     ): View? {
 
         binding = FragmentFirstBinding.inflate(layoutInflater, container, false)
+        //Manejo de disposicion de los elementos y tiene la informacion de
+        //elementos cargados
+        lmanager= LinearLayoutManager(
+            requireActivity(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+
         return binding.root
     }
 
@@ -61,12 +74,41 @@ class FirstFragment : Fragment() {
         val adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_layout, list)
         binding.spinner.adapter = adapter
         //binding.listView.adapter=adapter
-        chargeDataRv()
+        chargeDataRv("cap")
         //Cuando se hace swipe es para hacer la carga de de datos
         binding.rvSwipe.setOnRefreshListener {
-            chargeDataRv()
+            chargeDataRv("cap")
             binding.rvSwipe.isRefreshing = false
         }
+        binding.rvMarvelChars.addOnScrollListener(
+            object: RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    //Cuantos han pasado
+                    if(dy>0){
+                        val v= lmanager.childCount
+                        //Posicion en la que esta actualmente
+                        val p= lmanager.findFirstVisibleItemPosition()
+                        //Cantidad de items cargados
+                        val t= lmanager.itemCount
+
+                        if((v+p)>=t){
+                            lifecycleScope.launch((Dispatchers.IO)){
+                                val newItems = JikanAnimeLogic().getAllAnimes()
+//                                val newItems= MarvelLogic().getMarvelCharacters(
+//                                    "spider",
+//                                    18)
+                                withContext(Dispatchers.Main) {
+                                    rvAdapter.updateListItems(newItems)
+                                }
+                            }
+                        }
+
+                    }
+                    }
+
+            }
+        )
     }
 
     fun sendMarvelItem(item: Heroes) {
@@ -76,26 +118,39 @@ class FirstFragment : Fragment() {
         startActivity(i)
     }
 
-    fun chargeDataRv() {
-        lifecycleScope.launch(Dispatchers.IO) {
-            var rvAdapter = MarvelAdapter(
-                //Se detiene en la linea 83 debe haber un dato que no soparta
-                //JikanAnimeLogic().getAllAnimes()
-                MarvelLogic().getMarvelCharacters("spi", 8)
+    /*
+    fun corrutine(){
+        lifecycleScope.launch(Dispatchers.Main){
+            var name="Byron"
 
-            //JikanAnimeLogic.
-            ) { sendMarvelItem(it) }
+            //Realiza un cambio, crea otro hilo modifica procesa y se va
+            name= withContext(Dispatchers.IO){
+                name= "Jairo"
+                return@withContext name
+            }
+            binding.cardView.radius
+        }
+    }
+    */
+    fun chargeDataRv(search:String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            rvAdapter.items = JikanAnimeLogic().getAllAnimes()
+                //Se detiene en la linea 83 debe haber un dato que no soparta
+
+//                MarvelLogic().getMarvelCharacters(search, 18)
+//
+
+
+           //Si hay IO dento de main no hace falta el with context
 
             withContext(Dispatchers.Main) {
                 with(binding.rvMarvelChars){
                     this.adapter = rvAdapter
-                    this.layoutManager = LinearLayoutManager(
-                        requireActivity(),
-                        LinearLayoutManager.VERTICAL, false
-                    )
+                    this.layoutManager = lmanager
                 }
                 //false es el orden default true es inverso
             }
         }
+
     }
 }
