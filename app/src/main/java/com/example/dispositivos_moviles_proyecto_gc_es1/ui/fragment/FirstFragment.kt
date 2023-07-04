@@ -1,32 +1,24 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment
 
-import android.app.LauncherActivity.ListItem
 import android.content.Intent
 import android.os.Bundle
-import android.transition.Scene
-import android.transition.Transition
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.SimpleAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.jikanLogic.JikanAnimeLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
-import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.ListItems
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
-import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.MainActivity
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -46,9 +38,8 @@ class FirstFragment : Fragment() {
 
     private lateinit var binding: FragmentFirstBinding
     private lateinit var lmanager:LinearLayoutManager
-    private var rvAdapter: MarvelAdapter =
-        MarvelAdapter { sendMarvelItem(it) }
-
+    private lateinit var rvAdapter: MarvelAdapter
+    private lateinit var marvelCharItems: MutableList<Heroes>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,6 +100,11 @@ class FirstFragment : Fragment() {
 
             }
         )
+        binding.txtFilter.addTextChangedListener { filteredText->
+           var newItems= marvelCharItems.filter { items->items.heroe.contains(filteredText.toString()) }
+            rvAdapter.updateListItemsAdapter(newItems)
+        }
+
     }
 
     fun sendMarvelItem(item: Heroes) {
@@ -134,7 +130,9 @@ class FirstFragment : Fragment() {
     */
     fun chargeDataRv(search:String) {
         lifecycleScope.launch(Dispatchers.IO) {
-            rvAdapter.items = JikanAnimeLogic().getAllAnimes()
+
+            marvelCharItems=MarvelLogic().getMarvelCharacters(search, 20)
+            rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
                 //Se detiene en la linea 83 debe haber un dato que no soparta
 
 //                MarvelLogic().getMarvelCharacters(search, 18)
@@ -144,6 +142,7 @@ class FirstFragment : Fragment() {
            //Si hay IO dento de main no hace falta el with context
 
             withContext(Dispatchers.Main) {
+
                 with(binding.rvMarvelChars){
                     this.adapter = rvAdapter
                     this.layoutManager = lmanager
