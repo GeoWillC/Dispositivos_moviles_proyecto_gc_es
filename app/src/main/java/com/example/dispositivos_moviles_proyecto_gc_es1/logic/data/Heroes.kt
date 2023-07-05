@@ -1,4 +1,4 @@
-package com.example.dispositivos_moviles_proyecto_gc_es1.logic.list
+package com.example.dispositivos_moviles_proyecto_gc_es1.logic.data
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

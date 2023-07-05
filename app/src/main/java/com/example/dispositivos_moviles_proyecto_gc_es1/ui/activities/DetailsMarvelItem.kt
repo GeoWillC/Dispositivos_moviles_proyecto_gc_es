@@ -2,10 +2,8 @@ package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityDetailsMarvelItemBinding
-import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityWithBindingBinding
-import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
 import com.squareup.picasso.Picasso
 
 class DetailsMarvelItem : AppCompatActivity() {

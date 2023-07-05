@@ -2,7 +2,7 @@ package com.example.dispositivos_moviles_proyecto_gc_es1.logic.jikanLogic
 
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.ApiConnection
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.endpoints.JikanEndpoint
-import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
 
 class JikanAnimeLogic {
 

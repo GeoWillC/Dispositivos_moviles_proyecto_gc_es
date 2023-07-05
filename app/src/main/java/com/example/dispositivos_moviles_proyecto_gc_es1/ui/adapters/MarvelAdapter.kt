@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.MarvelCharactersBinding
-import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
 import com.squareup.picasso.Picasso
 
 class MarvelAdapter(

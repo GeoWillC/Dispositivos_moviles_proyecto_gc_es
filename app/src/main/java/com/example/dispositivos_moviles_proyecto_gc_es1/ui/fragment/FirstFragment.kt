@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.jikanLogic.JikanAnimeLogic
-import com.example.dispositivos_moviles_proyecto_gc_es1.logic.list.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
@@ -39,7 +39,8 @@ class FirstFragment : Fragment() {
     private lateinit var binding: FragmentFirstBinding
     private lateinit var lmanager:LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
-    private lateinit var marvelCharItems: MutableList<Heroes>
+    //Ppara asignar luego nuevos valores
+    private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,9 +101,11 @@ class FirstFragment : Fragment() {
 
             }
         )
+        //filto de datos y normalizacion de datos to lowercase
         binding.txtFilter.addTextChangedListener { filteredText->
-           var newItems= marvelCharItems.filter { items->items.heroe.contains(filteredText.toString()) }
+           var newItems= marvelCharItems.filter { items->items.heroe.lowercase().contains(filteredText.toString().lowercase()) }
             rvAdapter.updateListItemsAdapter(newItems)
+
         }
 
     }
@@ -129,9 +132,14 @@ class FirstFragment : Fragment() {
     }
     */
     fun chargeDataRv(search:String) {
-        lifecycleScope.launch(Dispatchers.IO) {
+        //hilo principal
+        lifecycleScope.launch(Dispatchers.Main) {
 
-            marvelCharItems=MarvelLogic().getMarvelCharacters(search, 20)
+            //relleno la listaa en otro hilo y retorno
+            marvelCharItems=withContext(Dispatchers.IO){
+               return@withContext MarvelLogic().getMarvelCharacters(search, 20)
+            }
+
             rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
                 //Se detiene en la linea 83 debe haber un dato que no soparta
 
@@ -140,10 +148,7 @@ class FirstFragment : Fragment() {
 
 
            //Si hay IO dento de main no hace falta el with context
-
-            withContext(Dispatchers.Main) {
-
-                with(binding.rvMarvelChars){
+           binding.rvMarvelChars.apply{
                     this.adapter = rvAdapter
                     this.layoutManager = lmanager
                 }
@@ -152,4 +157,3 @@ class FirstFragment : Fragment() {
         }
 
     }
-}
