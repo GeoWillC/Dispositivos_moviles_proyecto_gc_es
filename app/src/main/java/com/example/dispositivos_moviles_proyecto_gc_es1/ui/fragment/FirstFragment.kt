@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
@@ -39,6 +40,7 @@ class FirstFragment : Fragment() {
     private lateinit var binding: FragmentFirstBinding
     private lateinit var lmanager:LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
+    private lateinit var gManager: GridLayoutManager
     //Ppara asignar luego nuevos valores
     private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
 
@@ -50,11 +52,13 @@ class FirstFragment : Fragment() {
         binding = FragmentFirstBinding.inflate(layoutInflater, container, false)
         //Manejo de disposicion de los elementos y tiene la informacion de
         //elementos cargados
+        gManager=   GridLayoutManager(requireActivity(),2)
         lmanager= LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL,
             false
         )
+        gManager=   GridLayoutManager(requireActivity(),2)
 
         return binding.root
     }
@@ -86,7 +90,7 @@ class FirstFragment : Fragment() {
 
                         if((v+p)>=t){
                             lifecycleScope.launch((Dispatchers.IO)){
-                                val newItems = JikanAnimeLogic().getAllAnimes()
+                                val newItems = MarvelLogic().getAllMarvelCharacters(0,99)
 //                                val newItems= MarvelLogic().getMarvelCharacters(
 //                                    "spider",
 //                                    18)
@@ -134,26 +138,19 @@ class FirstFragment : Fragment() {
     fun chargeDataRv(search:String) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
-
             //relleno la listaa en otro hilo y retorno
             marvelCharItems=withContext(Dispatchers.IO){
-               return@withContext MarvelLogic().getMarvelCharacters(search, 20)
+               return@withContext MarvelLogic().getAllMarvelCharacters(0, 99)
             }
-
             rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
                 //Se detiene en la linea 83 debe haber un dato que no soparta
-
 //                MarvelLogic().getMarvelCharacters(search, 18)
-//
-
-
            //Si hay IO dento de main no hace falta el with context
            binding.rvMarvelChars.apply{
                     this.adapter = rvAdapter
-                    this.layoutManager = lmanager
+                    this.layoutManager = gManager
                 }
                 //false es el orden default true es inverso
             }
         }
-
     }
