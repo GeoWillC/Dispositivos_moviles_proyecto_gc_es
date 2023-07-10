@@ -34,13 +34,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [FirstFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FirstFragment : Fragment() {
+class FirstFragment(value: Boolean) : Fragment() {
 
-
+    private var confirm = value
     private lateinit var binding: FragmentFirstBinding
-    private lateinit var lmanager:LinearLayoutManager
+    private lateinit var lmanager: LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
     private lateinit var gManager: GridLayoutManager
+
     //Ppara asignar luego nuevos valores
     private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
 
@@ -52,13 +53,13 @@ class FirstFragment : Fragment() {
         binding = FragmentFirstBinding.inflate(layoutInflater, container, false)
         //Manejo de disposicion de los elementos y tiene la informacion de
         //elementos cargados
-        gManager=   GridLayoutManager(requireActivity(),2)
-        lmanager= LinearLayoutManager(
+        gManager = GridLayoutManager(requireActivity(), 2)
+        lmanager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL,
             false
         )
-        gManager=   GridLayoutManager(requireActivity(),2)
+        gManager = GridLayoutManager(requireActivity(), 2)
 
         return binding.root
     }
@@ -77,22 +78,21 @@ class FirstFragment : Fragment() {
             binding.rvSwipe.isRefreshing = false
         }
         binding.rvMarvelChars.addOnScrollListener(
-            object: RecyclerView.OnScrollListener(){
+            object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     //Cuantos han pasado
-
                     //Infinite scroll
-                    if(dy>0){
-                        val v= lmanager.childCount
+                    if (dy > 0) {
+                        val v = lmanager.childCount
                         //Posicion en la que esta actualmente
-                        val p= lmanager.findFirstVisibleItemPosition()
+                        val p = lmanager.findFirstVisibleItemPosition()
                         //Cantidad de items cargados
-                        val t= lmanager.itemCount
+                        val t = lmanager.itemCount
 
-                        if((v+p)>=t){
-                            lifecycleScope.launch((Dispatchers.IO)){
-                                val newItems = MarvelLogic().getAllMarvelCharacters(0,99)
+                        if ((v + p) >= t) {
+                            lifecycleScope.launch((Dispatchers.IO)) {
+                                val newItems = MarvelLogic().getAllMarvelCharacters(0, 99)
 //                                val newItems= MarvelLogic().getMarvelCharacters(
 //                                    "spider",
 //                                    18)
@@ -101,18 +101,16 @@ class FirstFragment : Fragment() {
                                 }
                             }
                         }
-
                     }
-                    }
-
+                }
             }
         )
         //filto de datos y normalizacion de datos to lowercase
-
+        /*
         binding.txtFilter.addTextChangedListener { filteredText->
            var newItems= marvelCharItems.filter { items->items.heroe.lowercase().contains(filteredText.toString().lowercase()) }
             rvAdapter.updateListItemsAdapter(newItems)
-        }
+        }*/
     }
 
     fun sendMarvelItem(item: Heroes) {
@@ -136,40 +134,41 @@ class FirstFragment : Fragment() {
         }
     }
     */
-    fun chargeDataRv(search:String) {
+    fun chargeDataRv(search: String) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
             //relleno la listaa en otro hilo y retorno
-            marvelCharItems=withContext(Dispatchers.IO){
-               return@withContext MarvelLogic().getAllMarvelCharacters(0, 100)
+            marvelCharItems = withContext(Dispatchers.IO) {
+                return@withContext MarvelLogic().getAllMarvelCharacters(0, 20)
             }
-            rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
-                //Se detiene en la linea 83 debe haber un dato que no soparta
-//                MarvelLogic().getMarvelCharacters(search, 18)
-           //Si hay IO dento de main no hace falta el with context
-           binding.rvMarvelChars.apply{
-                    this.adapter = rvAdapter
-                    this.layoutManager = lmanager
-                }
-                //false es el orden default true es inverso
-            }
-        }
-    fun chargeDataSearch(search:String) {
-        //hilo principal
-        lifecycleScope.launch(Dispatchers.Main) {
-            //relleno la listaa en otro hilo y retorno
-            marvelCharItems=withContext(Dispatchers.IO){
-                return@withContext MarvelLogic().getMarvelCharacters(search, 10)
-            }
-            rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
+            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
-            binding.rvMarvelChars.apply{
+            binding.rvMarvelChars.apply {
                 this.adapter = rvAdapter
                 this.layoutManager = lmanager
             }
             //false es el orden default true es inverso
         }
     }
+
+    fun chargeDataSearch(search: String) {
+        //hilo principal
+        lifecycleScope.launch(Dispatchers.Main) {
+            //relleno la listaa en otro hilo y retorno
+            marvelCharItems = withContext(Dispatchers.IO) {
+                return@withContext MarvelLogic().getMarvelCharacters(search, 100)
+            }
+            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+            //Se detiene en la linea 83 debe haber un dato que no soparta
+//                MarvelLogic().getMarvelCharacters(search, 18)
+            //Si hay IO dento de main no hace falta el with context
+            binding.rvMarvelChars.apply {
+                this.adapter = rvAdapter
+                this.layoutManager = lmanager
+            }
+            //false es el orden default true es inverso
+        }
     }
+}

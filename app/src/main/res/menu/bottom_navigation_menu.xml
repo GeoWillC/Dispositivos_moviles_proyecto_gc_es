@@ -11,6 +11,13 @@
 
 
         />
+    <item
+        android:id="@+id/search"
+        android:title="@string/menu_sear"
+        android:icon="@drawable/search"
+        android:enabled="true"
+        android:visible="true"
+        />
 
     <item
         android:id="@+id/favorito"
@@ -28,4 +35,5 @@
         android:enabled="true"
         android:visible="true"
         />
+
 </menu>

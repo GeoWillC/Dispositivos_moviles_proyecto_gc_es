@@ -28,31 +28,29 @@ import kotlinx.coroutines.withContext
  * Use the [FourthFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FourthFragment  : Fragment() {
+class FourthFragment : Fragment() {
 
 
     private lateinit var binding: FragmentFourthBinding
     private lateinit var lmanager: LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
     private lateinit var gManager: GridLayoutManager
+
     //Ppara asignar luego nuevos valores
     private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
 
         binding = FragmentFourthBinding.inflate(layoutInflater, container, false)
         //Manejo de disposicion de los elementos y tiene la informacion de
         //elementos cargados
-        gManager=   GridLayoutManager(requireActivity(),2)
-        lmanager= LinearLayoutManager(
-            requireActivity(),
-            LinearLayoutManager.VERTICAL,
-            false
+        gManager = GridLayoutManager(requireActivity(), 2)
+        lmanager = LinearLayoutManager(
+            requireActivity(), LinearLayoutManager.VERTICAL, false
         )
-        gManager=   GridLayoutManager(requireActivity(),2)
+        gManager = GridLayoutManager(requireActivity(), 2)
 
         return binding.root
     }
@@ -63,7 +61,7 @@ class FourthFragment  : Fragment() {
 
         //binding.listView.adapter=adapter
         //Cuando se hace swipe es para hacer la carga de de datos
-        binding.txtFilter.addTextChangedListener{
+        binding.txtFilter.addTextChangedListener {
             chargeDataRv(binding.txtFilter.text.toString())
         }
 
@@ -76,6 +74,7 @@ class FourthFragment  : Fragment() {
         //proceso de pasar de un objeto a un string para poderlo transmitir por la web
         startActivity(i)
     }
+
     /*
     fun corrutine(){
         lifecycleScope.launch(Dispatchers.Main){
@@ -90,36 +89,39 @@ class FourthFragment  : Fragment() {
         }
     }
     */
-    fun chargeDataRv(search:String) {
+    fun chargeDataRv(search: String) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
             //relleno la listaa en otro hilo y retorno
-            marvelCharItems= withContext(Dispatchers.IO){
+            marvelCharItems = withContext(Dispatchers.IO) {
                 return@withContext MarvelLogic().getMarvelCharacters(search, 100)
             }
-            rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
+            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
-            binding.rvMarvelChars.apply{
+            binding.rvMarvelChars.apply {
                 this.adapter = rvAdapter
                 this.layoutManager = lmanager
             }
             //false es el orden default true es inverso
         }
     }
-    fun chargeDataSearch(search:String) {
+
+    fun chargeDataSearch(search: String) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
             //relleno la listaa en otro hilo y retorno
-            marvelCharItems= withContext(Dispatchers.IO){
-                return@withContext MarvelLogic().getMarvelCharacters(binding.txtFilter.text.toString(), 10)
+            marvelCharItems = withContext(Dispatchers.IO) {
+                return@withContext MarvelLogic().getMarvelCharacters(
+                    binding.txtFilter.text.toString(), 10
+                )
             }
-            rvAdapter= MarvelAdapter (marvelCharItems){sendMarvelItem(it)}
+            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
-            binding.rvMarvelChars.apply{
+            binding.rvMarvelChars.apply {
                 this.adapter = rvAdapter
                 this.layoutManager = lmanager
             }

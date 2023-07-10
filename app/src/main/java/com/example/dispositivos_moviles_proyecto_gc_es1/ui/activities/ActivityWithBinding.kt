@@ -9,6 +9,7 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityWithBindingBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FirstFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FourthFragment
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.SecondFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.ThirdFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.ManagerFragment
 
@@ -23,16 +24,13 @@ class ActivityWithBinding : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
         var name: String = ""
-
         // De esta forma accedemos a los contenidos enviados por otra Activity
         // intent.extras.let {
         // it? significa que este item/objeto puede ser nulo
         //   name = it?.getString("var1")!!
         //}
         Log.d("UCE", "Hola $name")
-
         binding.titulo.text = "Bienvenido $name!"
 
         /* // Se usa !! si estamos seguros de que siempre llegara informacion a nuestra activity
@@ -47,7 +45,7 @@ class ActivityWithBinding : AppCompatActivity() {
         ManagerFragment().replaceFragment(
             supportFragmentManager,
             binding.frContainer.id,
-            FirstFragment()
+            FirstFragment(false)
         )
         initClass()
     }
@@ -73,7 +71,7 @@ class ActivityWithBinding : AppCompatActivity() {
                     ManagerFragment().replaceFragment(
                         supportFragmentManager,
                         binding.frContainer.id,
-                        FirstFragment()
+                        FirstFragment(false)
                     )
                     true
                 }
@@ -84,11 +82,9 @@ class ActivityWithBinding : AppCompatActivity() {
                     ManagerFragment().replaceFragment(
                         supportFragmentManager,
                         binding.frContainer.id,
-                        FourthFragment()
+                        SecondFragment()
                     )
                     true
-
-
                 }
 
                 R.id.chat -> {
@@ -101,12 +97,19 @@ class ActivityWithBinding : AppCompatActivity() {
                     true
                 }
 
+                R.id.search -> {
+                    ManagerFragment().replaceFragment(
+                        supportFragmentManager,
+                        binding.frContainer.id,
+                        FourthFragment()
+                    )
+                    true
+                }
+
                 else -> {false}
             }
         }
-
     }
-
     override fun onBackPressed() {
         super.onBackPressed()
     }

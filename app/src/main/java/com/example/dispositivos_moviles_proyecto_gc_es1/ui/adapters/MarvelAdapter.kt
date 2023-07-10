@@ -30,13 +30,10 @@ class MarvelAdapter(
             binding.textView2.text = item.comic
             Picasso.get().load(item.img).into(binding.imageView)
             itemView.setOnClickListener {
-
                 //Aqui va la transicion
-
                 //Snackbar.make(binding.imageView,
                 //  item.heroe,Snackbar.LENGTH_SHORT).show()
                 fnClic(item)
-
             }
         }
     }
@@ -67,14 +64,12 @@ class MarvelAdapter(
     override fun getItemCount(): Int = items.size
 
     fun updateListItems(newItems: List<Heroes>) {
-
         this.items = this.items.plus(newItems)
         //Fuente de datos
         notifyDataSetChanged()
     }
 
     fun updateListItemsAdapter(newItems: List<Heroes>) {
-
         this.items = newItems
         //Fuente de datos
         notifyDataSetChanged()
