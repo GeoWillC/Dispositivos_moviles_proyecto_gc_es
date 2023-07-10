@@ -8,7 +8,7 @@ import android.util.Log
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityWithBindingBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FirstFragment
-import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.SecondFragment
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FourthFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.ThirdFragment
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.ManagerFragment
 
@@ -84,7 +84,7 @@ class ActivityWithBinding : AppCompatActivity() {
                     ManagerFragment().replaceFragment(
                         supportFragmentManager,
                         binding.frContainer.id,
-                        SecondFragment()
+                        FourthFragment()
                     )
                     true
 

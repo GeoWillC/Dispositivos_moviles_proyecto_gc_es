@@ -45,23 +45,35 @@ class MarvelAdapter(
         parent: ViewGroup, viewType: Int
     ): MarvelAdapter.MarvelViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return MarvelViewHolder(inflater.inflate(R.layout.marvel_characters, parent, false))
+        return MarvelViewHolder(
+            inflater.inflate(
+                R.layout.marvel_characters,
+                parent,
+                false
+            )
+        )
     }
 
-    override fun onBindViewHolder(holder: MarvelAdapter.MarvelViewHolder, position: Int) {
-        holder.render(items[position], fnClic)
+    override fun onBindViewHolder(
+        holder: MarvelAdapter.MarvelViewHolder,
+        position: Int
+    ) {
+        holder.render(
+            items[position],
+            fnClic
+        )
     }
 
     override fun getItemCount(): Int = items.size
 
-    fun updateListItems(newItems: List<Heroes>){
+    fun updateListItems(newItems: List<Heroes>) {
 
         this.items = this.items.plus(newItems)
         //Fuente de datos
         notifyDataSetChanged()
     }
 
-    fun updateListItemsAdapter(newItems: List<Heroes>){
+    fun updateListItemsAdapter(newItems: List<Heroes>) {
 
         this.items = newItems
         //Fuente de datos

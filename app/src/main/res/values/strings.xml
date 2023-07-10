@@ -11,7 +11,8 @@
     <string name="contraseña">Contraseña</string>
     <string name="redes_sociales">O conéctese usando lasa redes sóciales</string>
     <string name="menu_home">Home</string>
-    <string name="menu_favs">Favs</string>
+    <string name="menu_favs">Busqueda</string>
+    <string name="menu_sear">Search</string>
     <string name="menu_chatgpt">ChatGPT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
