@@ -16,3 +16,11 @@ data class MarvelCharsDB(
     var img: String,
 ) :Parcelable
 
+fun MarvelCharsDB.getMarvelChars(): MarvelCharsDB{
+    return MarvelCharsDB(
+        id,
+    heroe,
+    comic,
+    img
+            )
+}

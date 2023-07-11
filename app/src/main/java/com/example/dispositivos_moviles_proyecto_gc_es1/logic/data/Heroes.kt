@@ -1,6 +1,7 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.logic.data
 
 import android.os.Parcelable
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.database.MarvelCharsDB
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -10,6 +11,18 @@ data class Heroes(
     var comic: String,
     var img: String,
 ) : Parcelable
+
+fun Heroes.getMarvelCharsDB(): MarvelCharsDB{
+
+    return MarvelCharsDB(
+        id,
+        heroe,
+        comic,
+        img
+
+    )
+
+}
 
 
 class ListItems {

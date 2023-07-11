@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityMainBinding
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import com.example.dispositivosmoviles.logic.validator.LoginValidator
 import com.google.android.material.snackbar.Snackbar
 
@@ -70,7 +71,9 @@ class MainActivity : AppCompatActivity() {
     // Se ejecuta inmediatamente despues del onCreate
     override fun onStart() {
         super.onStart()
-        initClass()
+        //initClass()
+        /*val db=Dispositivos_moviles_proyecto_gc_es1.getDbIntance()
+        db.marvelDao()*/
     }
 
     override fun onDestroy() {

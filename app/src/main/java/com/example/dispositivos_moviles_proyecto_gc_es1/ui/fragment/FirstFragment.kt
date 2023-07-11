@@ -19,9 +19,11 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -41,6 +43,7 @@ class FirstFragment(value: Boolean) : Fragment() {
     private lateinit var lmanager: LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
     private lateinit var gManager: GridLayoutManager
+
 
     //Ppara asignar luego nuevos valores
     private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
@@ -71,10 +74,13 @@ class FirstFragment(value: Boolean) : Fragment() {
         val adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_layout, list)
         binding.spinner.adapter = adapter
         //binding.listView.adapter=adapter
-        chargeDataRv("cap")
+       //chargeDataRv("cap")
+        chargeDataRVDB(5)
+
         //Cuando se hace swipe es para hacer la carga de de datos
         binding.rvSwipe.setOnRefreshListener {
-            chargeDataRv("cap")
+            //chargeDataRv("cap")
+            chargeDataRVDB(5)
             binding.rvSwipe.isRefreshing = false
         }
         binding.rvMarvelChars.addOnScrollListener(
@@ -153,22 +159,33 @@ class FirstFragment(value: Boolean) : Fragment() {
         }
     }
 
-    fun chargeDataSearch(search: String) {
+    fun chargeDataRVDB(pos: Int) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
             //relleno la listaa en otro hilo y retorno
             marvelCharItems = withContext(Dispatchers.IO) {
-                return@withContext MarvelLogic().getMarvelCharacters(search, 100)
+               var marvelCharItems= MarvelLogic().getAllMarvelCharsDB().toMutableList()
+
+                if(marvelCharItems.isEmpty()){
+                    marvelCharItems =  (MarvelLogic().getAllMarvelCharacters(0, 50))
+                    MarvelLogic().insertMarvelCharsToDB(marvelCharItems)
+                }
+
+            return@withContext marvelCharItems
             }
+
+
             rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
             binding.rvMarvelChars.apply {
                 this.adapter = rvAdapter
-                this.layoutManager = lmanager
+                this.layoutManager = gManager
+                gManager.scrollToPositionWithOffset(pos, 10)
             }
             //false es el orden default true es inverso
         }
+       // page++
     }
 }

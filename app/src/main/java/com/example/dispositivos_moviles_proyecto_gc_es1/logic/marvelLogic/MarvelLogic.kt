@@ -4,7 +4,10 @@ import android.util.Log
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.ApiConnection
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.endpoints.MarvelEndPoints
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.getMarvelCharsDB
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.database.MarvelCharsDB
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.getMarvelChar
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 
 class MarvelLogic {
 
@@ -54,5 +57,29 @@ class MarvelLogic {
 
 
     }
+    suspend fun getAllMarvelCharsDB(): List<Heroes>{
+        var items: ArrayList<Heroes> = arrayListOf()
+        val itemsAux= Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().getAllCharacters()
 
+        itemsAux.forEach{
+            items.add(
+                Heroes(
+                    it.id,
+                    it.heroe,
+                    it.comic,
+                    it.img)
+                )
+
+
+        }
+        return items
+    }
+    suspend fun insertMarvelCharsToDB(items:List<Heroes>){
+        var itemsDB= arrayListOf<MarvelCharsDB>()
+        items.forEach{
+            itemsDB.add(it.getMarvelCharsDB())
+        }
+
+        Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().insertMarvelChar(itemsDB)
+    }
 }
