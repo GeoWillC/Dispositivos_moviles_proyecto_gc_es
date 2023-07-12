@@ -20,6 +20,8 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.Marvel
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
+import com.example.dispositivosmoviles.ui.utilities.Metodos
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,7 +45,8 @@ class FirstFragment(value: Boolean) : Fragment() {
     private lateinit var lmanager: LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
     private lateinit var gManager: GridLayoutManager
-
+    private val limit=25
+    private var offset=0
 
     //Ppara asignar luego nuevos valores
     private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
@@ -75,12 +78,12 @@ class FirstFragment(value: Boolean) : Fragment() {
         binding.spinner.adapter = adapter
         //binding.listView.adapter=adapter
        //chargeDataRv("cap")
-        chargeDataRVDB(5)
+        chargeDataRVInit(offset , limit)
 
         //Cuando se hace swipe es para hacer la carga de de datos
         binding.rvSwipe.setOnRefreshListener {
             //chargeDataRv("cap")
-            chargeDataRVDB(5)
+            chargeDataRv(offset, limit)
             binding.rvSwipe.isRefreshing = false
         }
         binding.rvMarvelChars.addOnScrollListener(
@@ -98,12 +101,13 @@ class FirstFragment(value: Boolean) : Fragment() {
 
                         if ((v + p) >= t) {
                             lifecycleScope.launch((Dispatchers.IO)) {
-                                val newItems = MarvelLogic().getAllMarvelCharacters(0, 99)
+                                val newItems = MarvelLogic().getAllMarvelCharacters(offset, limit)
 //                                val newItems= MarvelLogic().getMarvelCharacters(
 //                                    "spider",
 //                                    18)
                                 withContext(Dispatchers.Main) {
                                     rvAdapter.updateListItems(newItems)
+                                    this@FirstFragment.offset+= limit
                                 }
                             }
                         }
@@ -140,12 +144,12 @@ class FirstFragment(value: Boolean) : Fragment() {
         }
     }
     */
-    fun chargeDataRv(search: String) {
+    fun chargeDataRv(offset: Int, limit: Int) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
             //relleno la listaa en otro hilo y retorno
             marvelCharItems = withContext(Dispatchers.IO) {
-                return@withContext MarvelLogic().getAllMarvelCharacters(0, 20)
+                return@withContext MarvelLogic().getAllMarvelCharacters(offset, limit)
             }
             rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
             //Se detiene en la linea 83 debe haber un dato que no soparta
@@ -155,37 +159,36 @@ class FirstFragment(value: Boolean) : Fragment() {
                 this.adapter = rvAdapter
                 this.layoutManager = lmanager
             }
+            this@FirstFragment.offset= offset +limit
             //false es el orden default true es inverso
         }
     }
 
-    fun chargeDataRVDB(pos: Int) {
-        //hilo principal
-        lifecycleScope.launch(Dispatchers.Main) {
-            //relleno la listaa en otro hilo y retorno
-            marvelCharItems = withContext(Dispatchers.IO) {
-               var marvelCharItems= MarvelLogic().getAllMarvelCharsDB().toMutableList()
-
-                if(marvelCharItems.isEmpty()){
-                    marvelCharItems =  (MarvelLogic().getAllMarvelCharacters(0, 50))
-                    MarvelLogic().insertMarvelCharsToDB(marvelCharItems)
-                }
-
-            return@withContext marvelCharItems
-            }
-
-
-            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
-            //Se detiene en la linea 83 debe haber un dato que no soparta
+    fun chargeDataRVInit(offset: Int,limit: Int) {
+       if (Metodos().isOnline(requireActivity())) {
+           lifecycleScope.launch(Dispatchers.Main) {
+               //relleno la listaa en otro hilo y retorno
+               marvelCharItems = withContext(Dispatchers.IO) {
+                   MarvelLogic().getInitChars(offset , limit)
+                   //Lo que estaba aqui se debe poner en el LOGIC, Saludos
+               }
+               rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+               //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
-            //Si hay IO dento de main no hace falta el with context
-            binding.rvMarvelChars.apply {
-                this.adapter = rvAdapter
-                this.layoutManager = gManager
-                gManager.scrollToPositionWithOffset(pos, 10)
-            }
-            //false es el orden default true es inverso
-        }
+               //Si hay IO dento de main no hace falta el with context
+               binding.rvMarvelChars.apply {
+                   this.adapter = rvAdapter
+                   this.layoutManager = gManager
+                   gManager.scrollToPositionWithOffset(offset, limit)
+               }
+               this@FirstFragment.offset+=limit
+               //false es el orden default true es inverso
+           }
+        } else{
+            Snackbar.make(binding.cardView, "No hay conexion", Snackbar.LENGTH_LONG).show()
+       }
+        //hilo principal
+
        // page++
     }
 }

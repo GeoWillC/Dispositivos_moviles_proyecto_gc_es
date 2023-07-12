@@ -8,6 +8,7 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.getMarvelChar
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.database.MarvelCharsDB
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.getMarvelChar
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
+import java.lang.RuntimeException
 
 class MarvelLogic {
 
@@ -57,6 +58,26 @@ class MarvelLogic {
 
 
     }
+
+    suspend fun getInitChars(offset:Int, limit:Int): MutableList<Heroes>{
+        var marvelCharItems= MarvelLogic().getAllMarvelCharsDB().toMutableList()
+        try {
+            Log.d("UCE2", marvelCharItems.size.toString())
+            if(marvelCharItems.isEmpty()){
+
+                marvelCharItems =  (MarvelLogic().getAllMarvelCharacters(offset, limit))
+                MarvelLogic().insertMarvelCharsToDB(marvelCharItems)
+            }
+        }catch (ex: Exception){
+            throw RuntimeException(ex.message)
+        }finally {
+            return marvelCharItems
+
+        }
+
+
+    }
+
     suspend fun getAllMarvelCharsDB(): List<Heroes>{
         var items: ArrayList<Heroes> = arrayListOf()
         val itemsAux= Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().getAllCharacters()

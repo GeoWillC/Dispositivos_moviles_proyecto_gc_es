@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
     <!-- Permisos para acceso a contenido multimedia, puede ser riesgoso pal usuario -->
     <!-- accesos a internet no requiere permiso, para descargar la img -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
