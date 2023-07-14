@@ -16,6 +16,7 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.jikanLogic.JikanAnimeLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.getMarvelCharsDB
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
@@ -140,7 +141,7 @@ class FirstFragment(value: Boolean) : Fragment() {
             marvelCharItems = withContext(Dispatchers.IO) {
                 return@withContext MarvelLogic().getAllMarvelCharacters(offset, limit)
             }
-            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+            rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) },{saveMarvelItem(it)})
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
@@ -154,6 +155,17 @@ class FirstFragment(value: Boolean) : Fragment() {
         this.offset+=this.limit
     }
 
+    fun saveMarvelItem(item: Heroes):Boolean{
+        lifecycleScope.launch(Dispatchers.Main){
+            withContext(Dispatchers.IO){
+                Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().insertMarvelChar(
+                    listOf(item.getMarvelCharsDB())
+                )
+            }
+        }
+        return true
+    }
+
     fun chargeDataRVInit(offset: Int, limit: Int) {
         if (Metodos().isOnline(requireActivity())) {
             lifecycleScope.launch(Dispatchers.Main) {
@@ -162,7 +174,7 @@ class FirstFragment(value: Boolean) : Fragment() {
                     MarvelLogic().getInitChars(offset, limit)
                     //Lo que estaba aqui se debe poner en el LOGIC, Saludos
                 }
-                rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+                rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, {saveMarvelItem(it)})
                 //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
                 //Si hay IO dento de main no hace falta el with context

@@ -68,8 +68,21 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_view"
                 app:layout_constraintTop_toBottomOf="@+id/text_view" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <ImageButton
+                android:id="@+id/fav_chars"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_marginBottom="16dp"
+                android:background="#4EC2EC"
+                android:src="@drawable/favo_chars"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
 

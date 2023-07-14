@@ -1,6 +1,7 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic
 
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.ApiConnection
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.endpoints.MarvelEndPoints
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
@@ -8,6 +9,8 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.getMarvelChar
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.database.MarvelCharsDB
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.entities.marvel.getMarvelChar
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.RuntimeException
 
 class MarvelLogic {
@@ -59,6 +62,7 @@ class MarvelLogic {
 
     }
 
+
     suspend fun getInitChars(offset:Int, limit:Int): MutableList<Heroes>{
         var marvelCharItems= MarvelLogic().getAllMarvelCharsDB().toMutableList()
         try {
@@ -103,4 +107,5 @@ class MarvelLogic {
 
         Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().insertMarvelChar(itemsDB)
     }
+
 }

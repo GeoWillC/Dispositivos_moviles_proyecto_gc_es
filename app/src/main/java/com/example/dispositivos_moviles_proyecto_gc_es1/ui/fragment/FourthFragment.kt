@@ -16,9 +16,11 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFourthBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.getMarvelCharsDB
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -75,6 +77,18 @@ class FourthFragment : Fragment() {
         startActivity(i)
     }
 
+    fun saveMarvelItem(item: Heroes):Boolean{
+        lifecycleScope.launch(Dispatchers.Main){
+            withContext(Dispatchers.IO){
+                Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().insertMarvelChar(
+                    listOf(item.getMarvelCharsDB())
+                )
+            }
+        }
+        return true
+    }
+
+
     /*
     fun corrutine(){
         lifecycleScope.launch(Dispatchers.Main){
@@ -96,7 +110,7 @@ class FourthFragment : Fragment() {
             marvelCharItems = withContext(Dispatchers.IO) {
                 return@withContext MarvelLogic().getMarvelCharacters(search, 100)
             }
-            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+            rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, {saveMarvelItem(it)})
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
@@ -117,7 +131,7 @@ class FourthFragment : Fragment() {
                     binding.txtFilter.text.toString(), 10
                 )
             }
-            rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+            rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, {saveMarvelItem(it)})
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
