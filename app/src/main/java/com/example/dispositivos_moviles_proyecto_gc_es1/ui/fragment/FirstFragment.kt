@@ -45,8 +45,8 @@ class FirstFragment(value: Boolean) : Fragment() {
     private lateinit var lmanager: LinearLayoutManager
     private lateinit var rvAdapter: MarvelAdapter
     private lateinit var gManager: GridLayoutManager
-    private val limit=25
-    private var offset=0
+    private val limit = 25
+    private var offset = 0
 
     //Ppara asignar luego nuevos valores
     private var marvelCharItems: MutableList<Heroes> = mutableListOf<Heroes>()
@@ -59,7 +59,7 @@ class FirstFragment(value: Boolean) : Fragment() {
         binding = FragmentFirstBinding.inflate(layoutInflater, container, false)
         //Manejo de disposicion de los elementos y tiene la informacion de
         //elementos cargados
-        gManager = GridLayoutManager(requireActivity(), 2)
+       // gManager = GridLayoutManager(requireActivity(), 2)
         lmanager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL,
@@ -73,12 +73,12 @@ class FirstFragment(value: Boolean) : Fragment() {
     override fun onStart() {
 
         super.onStart()
-        val list = arrayListOf<String>("Carlos", "Xavier", "Pepe", "Andres", "Mariano")
-        val adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_layout, list)
-        binding.spinner.adapter = adapter
+        //val list = arrayListOf<String>("Carlos", "Xavier", "Pepe", "Andres", "Mariano")
+        //val adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_layout, list)
+        //binding.spinner.adapter = adapter
         //binding.listView.adapter=adapter
-       //chargeDataRv("cap")
-        chargeDataRVInit(offset , limit)
+        //chargeDataRv("cap")
+        chargeDataRVInit(offset, limit)
 
         //Cuando se hace swipe es para hacer la carga de de datos
         binding.rvSwipe.setOnRefreshListener {
@@ -107,20 +107,23 @@ class FirstFragment(value: Boolean) : Fragment() {
 //                                    18)
                                 withContext(Dispatchers.Main) {
                                     rvAdapter.updateListItems(newItems)
-                                    this@FirstFragment.offset+= limit
+                                    //this@FirstFragment.offset+= limit
                                 }
                             }
+                            offset += limit
                         }
                     }
                 }
             }
         )
         //filto de datos y normalizacion de datos to lowercase
-        /*
-        binding.txtFilter.addTextChangedListener { filteredText->
-           var newItems= marvelCharItems.filter { items->items.heroe.lowercase().contains(filteredText.toString().lowercase()) }
+
+        binding.txtFilter.addTextChangedListener { filteredText ->
+            var newItems = marvelCharItems.filter { items ->
+                items.heroe.lowercase().contains(filteredText.toString().lowercase())
+            }
             rvAdapter.updateListItemsAdapter(newItems)
-        }*/
+        }
     }
 
     fun sendMarvelItem(item: Heroes) {
@@ -130,20 +133,6 @@ class FirstFragment(value: Boolean) : Fragment() {
         startActivity(i)
     }
 
-    /*
-    fun corrutine(){
-        lifecycleScope.launch(Dispatchers.Main){
-            var name="Byron"
-
-            //Realiza un cambio, crea otro hilo modifica procesa y se va
-            name= withContext(Dispatchers.IO){
-                name= "Jairo"
-                return@withContext name
-            }
-            binding.cardView.radius
-        }
-    }
-    */
     fun chargeDataRv(offset: Int, limit: Int) {
         //hilo principal
         lifecycleScope.launch(Dispatchers.Main) {
@@ -159,36 +148,38 @@ class FirstFragment(value: Boolean) : Fragment() {
                 this.adapter = rvAdapter
                 this.layoutManager = lmanager
             }
-            this@FirstFragment.offset= offset +limit
+            //this@FirstFragment.offset = offset + limit
             //false es el orden default true es inverso
         }
+        this.offset+=this.limit
     }
 
-    fun chargeDataRVInit(offset: Int,limit: Int) {
-       if (Metodos().isOnline(requireActivity())) {
-           lifecycleScope.launch(Dispatchers.Main) {
-               //relleno la listaa en otro hilo y retorno
-               marvelCharItems = withContext(Dispatchers.IO) {
-                   MarvelLogic().getInitChars(offset , limit)
-                   //Lo que estaba aqui se debe poner en el LOGIC, Saludos
-               }
-               rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
-               //Se detiene en la linea 83 debe haber un dato que no soparta
+    fun chargeDataRVInit(offset: Int, limit: Int) {
+        if (Metodos().isOnline(requireActivity())) {
+            lifecycleScope.launch(Dispatchers.Main) {
+                //relleno la listaa en otro hilo y retorno
+                marvelCharItems = withContext(Dispatchers.IO) {
+                    MarvelLogic().getInitChars(offset, limit)
+                    //Lo que estaba aqui se debe poner en el LOGIC, Saludos
+                }
+                rvAdapter = MarvelAdapter(marvelCharItems) { sendMarvelItem(it) }
+                //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
-               //Si hay IO dento de main no hace falta el with context
-               binding.rvMarvelChars.apply {
-                   this.adapter = rvAdapter
-                   this.layoutManager = gManager
-                   gManager.scrollToPositionWithOffset(offset, limit)
-               }
-               this@FirstFragment.offset+=limit
-               //false es el orden default true es inverso
-           }
-        } else{
+                //Si hay IO dento de main no hace falta el with context
+                binding.rvMarvelChars.apply {
+                    this.adapter = rvAdapter
+                    this.layoutManager = lmanager
+                   // gManager.scrollToPositionWithOffset(offset, limit)
+                }
+                //false es el orden default true es inverso
+            }
+            this.offset += this.limit
+
+        } else {
             Snackbar.make(binding.cardView, "No hay conexion", Snackbar.LENGTH_LONG).show()
-       }
+        }
         //hilo principal
 
-       // page++
+        // page++
     }
 }
