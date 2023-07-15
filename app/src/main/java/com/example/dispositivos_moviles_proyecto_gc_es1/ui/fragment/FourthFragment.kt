@@ -110,7 +110,9 @@ class FourthFragment : Fragment() {
             marvelCharItems = withContext(Dispatchers.IO) {
                 return@withContext MarvelLogic().getMarvelCharacters(search, 100)
             }
-            rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, {saveMarvelItem(it)})
+            rvAdapter = MarvelAdapter(marvelCharItems,
+                { sendMarvelItem(it) },
+                {saveMarvelItem(it)})
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context

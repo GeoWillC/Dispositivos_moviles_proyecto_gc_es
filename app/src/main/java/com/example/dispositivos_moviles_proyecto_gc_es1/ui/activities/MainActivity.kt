@@ -1,20 +1,36 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.lifecycleScope
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
+import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.dao.marvel.MarvelCharsDAO
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityMainBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import com.example.dispositivosmoviles.logic.validator.LoginValidator
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.UUID
+
+//En todo momento el datastore de tipo preference para crear automaticamente el contenido que debe
+//tener la variable
+//Mini base de datos clave valor
+val Context.dataStore: DataStore<Preferences> by
+preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
+
 
     private lateinit var binding: ActivityMainBinding
 
@@ -71,7 +87,7 @@ class MainActivity : AppCompatActivity() {
     // Se ejecuta inmediatamente despues del onCreate
     override fun onStart() {
         super.onStart()
-        //initClass()
+        initClass()
         /*val db=Dispositivos_moviles_proyecto_gc_es1.getDbIntance()
         db.marvelDao()*/
     }
@@ -116,7 +132,10 @@ class MainActivity : AppCompatActivity() {
                     binding.txtPassword.text.toString()
                 )
                 if (check) {
-
+                    //No voy a modificar nada por eso solo necesito IO
+                    lifecycleScope.launch(Dispatchers.IO){
+                        saveDataStore(binding.txtUser.text.toString())
+                    }
                     var intent = Intent(
                         this,
                         ActivityWithBinding::class.java
@@ -132,12 +151,17 @@ class MainActivity : AppCompatActivity() {
                         Snackbar.LENGTH_SHORT
                     ).setBackgroundTint(Color.BLACK).show()
                 }
-
-
-
-
         }
+    }
 
+    private suspend fun saveDataStore(stringData:String){
+        // it implicito cambiamos por prefs
+        dataStore.edit { prefs->
+            prefs[stringPreferencesKey("usuario")]= stringData
+            //universal unic identifier
+            prefs[stringPreferencesKey("session")]= UUID.randomUUID().toString()
+            prefs[stringPreferencesKey("email")]= "dismov@uce.edu.ec"
+        }
     }
 }
 

@@ -2,12 +2,16 @@ package com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.widget.addTextChangedListener
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,14 +20,19 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.FragmentFirstBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.jikanLogic.JikanAnimeLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.Heroes
+import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.UserDataStore
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.data.getMarvelCharsDB
 import com.example.dispositivos_moviles_proyecto_gc_es1.logic.marvelLogic.MarvelLogic
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMarvelItem
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.dataStore
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import com.example.dispositivosmoviles.ui.utilities.Metodos
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Dispatcher
@@ -60,7 +69,7 @@ class FirstFragment(value: Boolean) : Fragment() {
         binding = FragmentFirstBinding.inflate(layoutInflater, container, false)
         //Manejo de disposicion de los elementos y tiene la informacion de
         //elementos cargados
-       // gManager = GridLayoutManager(requireActivity(), 2)
+        // gManager = GridLayoutManager(requireActivity(), 2)
         lmanager = LinearLayoutManager(
             requireActivity(),
             LinearLayoutManager.VERTICAL,
@@ -74,6 +83,16 @@ class FirstFragment(value: Boolean) : Fragment() {
     override fun onStart() {
 
         super.onStart()
+        lifecycleScope.launch(Dispatchers.IO) {
+            //Collect Se recorre el flujo obtenido
+            //Map para guardar
+            getDataStore().collect {user->
+                Log.d("UCE3", user.email)
+                Log.d("UCE3", user.name)
+                Log.d("UCE3", user.session)
+            }
+        }
+
         //val list = arrayListOf<String>("Carlos", "Xavier", "Pepe", "Andres", "Mariano")
         //val adapter = ArrayAdapter<String>(requireActivity(), R.layout.simple_layout, list)
         //binding.spinner.adapter = adapter
@@ -141,7 +160,8 @@ class FirstFragment(value: Boolean) : Fragment() {
             marvelCharItems = withContext(Dispatchers.IO) {
                 return@withContext MarvelLogic().getAllMarvelCharacters(offset, limit)
             }
-            rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) },{saveMarvelItem(it)})
+            rvAdapter =
+                MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, { saveMarvelItem(it) })
             //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
             //Si hay IO dento de main no hace falta el with context
@@ -152,12 +172,13 @@ class FirstFragment(value: Boolean) : Fragment() {
             //this@FirstFragment.offset = offset + limit
             //false es el orden default true es inverso
         }
-        this.offset+=this.limit
+        this.offset += this.limit
+
     }
 
-    fun saveMarvelItem(item: Heroes):Boolean{
-        lifecycleScope.launch(Dispatchers.Main){
-            withContext(Dispatchers.IO){
+    fun saveMarvelItem(item: Heroes): Boolean {
+        lifecycleScope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
                 Dispositivos_moviles_proyecto_gc_es1.getDbIntance().marvelDao().insertMarvelChar(
                     listOf(item.getMarvelCharsDB())
                 )
@@ -165,6 +186,7 @@ class FirstFragment(value: Boolean) : Fragment() {
         }
         return true
     }
+
 
     fun chargeDataRVInit(offset: Int, limit: Int) {
         if (Metodos().isOnline(requireActivity())) {
@@ -174,14 +196,16 @@ class FirstFragment(value: Boolean) : Fragment() {
                     MarvelLogic().getInitChars(offset, limit)
                     //Lo que estaba aqui se debe poner en el LOGIC, Saludos
                 }
-                rvAdapter = MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, {saveMarvelItem(it)})
+
+                rvAdapter =
+                    MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, { saveMarvelItem(it) })
                 //Se detiene en la linea 83 debe haber un dato que no soparta
 //                MarvelLogic().getMarvelCharacters(search, 18)
                 //Si hay IO dento de main no hace falta el with context
                 binding.rvMarvelChars.apply {
                     this.adapter = rvAdapter
                     this.layoutManager = lmanager
-                   // gManager.scrollToPositionWithOffset(offset, limit)
+                    // gManager.scrollToPositionWithOffset(offset, limit)
                 }
                 //false es el orden default true es inverso
             }
@@ -194,4 +218,15 @@ class FirstFragment(value: Boolean) : Fragment() {
 
         // page++
     }
+
+    //datastore funcional en toda la app
+    //no hay contexto al ser fragment, debo pasar el del layout
+    private fun getDataStore()=
+        requireActivity().dataStore.data.map { prefs ->
+
+            UserDataStore(
+            prefs[stringPreferencesKey("usuario")].orEmpty(),
+            prefs[stringPreferencesKey("email")].orEmpty(),
+            prefs[stringPreferencesKey("session")].orEmpty())
+        }
 }

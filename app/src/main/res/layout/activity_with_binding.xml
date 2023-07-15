@@ -9,6 +9,16 @@
     >
 
     <TextView
+        android:id="@+id/txtWelcome"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
         android:id="@+id/titulo"
         style="@style/Binding_Title"
         android:layout_width="wrap_content"
