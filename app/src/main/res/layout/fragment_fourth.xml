@@ -4,38 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_blue_900"
+
+    android:background="@drawable/marvel_background"
     tools:context=".ui.fragment.FourthFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
 
     <EditText
         android:id="@+id/txtFilter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
+        android:background="@drawable/marvel_background"
+        android:drawable="@drawable/customborder"
+        android:gravity="center"
         android:imeOptions="actionDone"
         android:singleLine="true"
-        android:background="@color/white"
-        android:textColor="@color/black"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:drawable="@drawable/customborder"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        app:layout_constraintBottom_toTopOf="@id/rvMarvelChars"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.401"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/imageView3" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMarvelChars"
         android:layout_width="match_parent"
-        android:layout_height="484dp"
+        android:layout_height="330dp"
         android:layout_gravity="center"
-        android:layout_marginVertical="20dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginVertical="5dp"
+        app:flow_horizontalAlign="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtFilter" />
+        app:layout_constraintTop_toBottomOf="@+id/txtFilter"
+        app:layout_constraintVertical_bias="0.219" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="190dp"
+        android:layout_height="142dp"
+        android:src="@drawable/marvel_icon"
+        app:layout_constraintBottom_toTopOf="@+id/txtFilter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
