@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.*
@@ -27,6 +28,7 @@ import com.example.dispositivosmoviles.logic.validator.LoginValidator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 import java.util.UUID
 
 //En todo momento el datastore de tipo preference para crear automaticamente el contenido que debe
@@ -110,38 +112,100 @@ class MainActivity : AppCompatActivity() {
         }
         val appResultLocal = registerForActivityResult(StartActivityForResult()) { resultActivity ->
 
-            //contrato y clausulas
-            when (resultActivity.resultCode) {
+            val sn = Snackbar.make(
+                binding.textView2,
+                "",
+                Snackbar.LENGTH_LONG
+            )
+
+            var message = when (resultActivity.resultCode) {
                 RESULT_OK -> {
-
-                    Snackbar.make(binding.textView2, "Resultado exitoso", Snackbar.LENGTH_LONG).show()
-                  //  Log.d("UCE4", "Resultado exitoso")
-
+                    sn.setBackgroundTint(resources.getColor(R.color.azul))
+                    resultActivity.data?.getStringExtra("result").orEmpty()
                 }
 
                 RESULT_CANCELED -> {
-                    Snackbar.make(binding.textView2, "Resultado fallido", Snackbar.LENGTH_LONG).show()
-
-                   // Log.d("UCE4", "Resultado fallido")
+                    sn.setBackgroundTint(resources.getColor(R.color.rojito))
+                    resultActivity.data?.getStringExtra("result").orEmpty()
                 }
 
                 else -> {
-                    Snackbar.make(binding.textView2, "Lo suponia", Snackbar.LENGTH_LONG).show()
-
-                    //Log.d("UCE4", "Resultado dudoso")
+                    "Resultado Erroneo"
                 }
+//
             }
+            sn.setText(message)
+            sn.show()
 
+        }
+
+        val speechToText = registerForActivityResult(StartActivityForResult()) { activityResult ->
+            val sn = Snackbar.make(
+                binding.textView2,
+                "",
+                Snackbar.LENGTH_LONG
+            )
+
+            var message = ""
+            when (activityResult.resultCode) {
+                RESULT_OK -> {
+                    val msg =
+                        activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                            .toString()
+                    if (msg.isNotEmpty()) {
+                        val intent = Intent(
+                            Intent.ACTION_WEB_SEARCH
+                        )
+                        intent.setClassName(
+                            "com.google.android.googlequicksearchbox",
+                            "com.google.android.googlequicksearchbox.SearchActivity"
+                        )
+                        intent.putExtra(SearchManager.QUERY, msg.toString())
+                        startActivity(intent)
+                    }
+                }
+
+
+                RESULT_CANCELED -> {
+                    message = "Proceso Cancelado"
+                    sn.setBackgroundTint(resources.getColor(R.color.rojito))
+                }
+
+                else -> {
+                    message = "Resultado Erroneo"
+                    sn.setBackgroundTint(resources.getColor(R.color.rojito))
+                }
+//
+            }
+            sn.setText(message)
+            sn.show()
 
         }
 
         //Diferencia con la primera es que las 2 se van a comunicar y cuando lo hagan se va alanzar este contrato
-        val resIntent = Intent(this, ResultActivity::class.java)
-        binding.btnResult.setOnClickListener { appResultLocal.launch(resIntent) }
+
+        binding.btnResult.setOnClickListener {
+            val resIntent = Intent(this, ResultActivity::class.java)
+            appResultLocal.launch(resIntent)
+        }
+
+
+        binding.btnTwitter.setOnClickListener {
+            val intentSpeech = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intentSpeech.putExtra(
+                RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+            )
+            intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            intentSpeech.putExtra(RecognizerIntent.EXTRA_PROMPT, "Di algo")
+            speechToText.launch(intentSpeech)
+
+        }
     }
 
     private suspend fun saveDataStore(stringData: String) {
         // it implicito cambiamos por prefs
+
         dataStore.edit { prefs ->
             prefs[stringPreferencesKey("usuario")] = stringData
             //universal unic identifier
