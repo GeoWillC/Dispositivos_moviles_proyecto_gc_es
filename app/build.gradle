@@ -68,6 +68,8 @@ dependencies {
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:2.5.0")
 
+    //DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
-
+    //ubicacion
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 }

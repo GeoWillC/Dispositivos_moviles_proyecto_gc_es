@@ -1,10 +1,13 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -25,6 +28,8 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.dao.marv
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityMainBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import com.example.dispositivosmoviles.logic.validator.LoginValidator
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,17 +42,22 @@ import java.util.UUID
 val Context.dataStore: DataStore<Preferences> by
 preferencesDataStore(name = "settings")
 
+
 class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var fusedLocationProviderClient:FusedLocationProviderClient
 
+    //Anotacion que nos permite
     @SuppressLint("MissingInflated")
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        //Variable de clase inicializada cuando se ejecute onCreate
+        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this)
 
     }
 
@@ -65,6 +75,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Podemos crear nuestras funcionalidades en una funcion apartada e invocarla en el onCreate
+    @SuppressLint("MissingPermission")
     fun initClass() {
         binding.btnLogin.setOnClickListener {
 
@@ -87,14 +98,66 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             } else {
                 Snackbar.make(
-                    binding.btnLogin,
+                    binding.root,
                     "Usuario o contraseña incorrectos",
                     Snackbar.LENGTH_SHORT
                 ).setBackgroundTint(Color.BLACK).show()
             }
 
         }
+
+        val location = registerForActivityResult(RequestPermission()){
+            //Enviamos al permiso que necesitamos que se ejecute
+            isGranted:Boolean ->
+            when(isGranted){
+                //Conceder
+                true -> {
+                    //Retorna una tarea
+                    fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                        if(isGranted!=null){
+
+                            val a= Geocoder(this)
+                                    a.getFromLocation(it.latitude,it.longitude,1)
+
+                            Snackbar.make(binding.imageView,
+                                "${it.latitude},${it.longitude},${a}",
+                                Snackbar.LENGTH_LONG).show()
+
+
+                            val intent = Intent(Intent.ACTION_VIEW,
+                                Uri.parse("geo:${it.latitude},${it.longitude}"))
+                                startActivity(intent)
+
+                        }else {
+                            Snackbar.make(binding.imageView,
+                                "Enciende el GPS oe",
+                                Snackbar.LENGTH_LONG).show()
+                        }
+                    }
+                }
+
+                //Dialogo de porque necesita el permiso, lo solicita 2 veces
+                shouldShowRequestPermissionRationale(
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) -> {
+                    Snackbar.make(binding.imageView,"Cruza el permiso oe",Snackbar.LENGTH_LONG).show()
+                }
+                //Denegar
+                false ->{
+                    Snackbar.make(binding.imageView,"Permiso denegado",Snackbar.LENGTH_LONG).show()
+                }
+                //Tarea ya que contiene varios elementos
+                //El usuario debe saber para que necesita ese permiso
+                //Tengo el permiso conseguido
+            }
+        }
+
+        binding.btnRecuperarContra.setOnClickListener{
+            location.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
         binding.btnSearch.setOnClickListener {
+
             //Abre una url con un boton, este intent tiene un punto de partida pero no de llegada
             //con geo: se puede mandar la latitud y longitud de una pos del mapa
             /* val intent = Intent(Intent.ACTION_VIEW,
@@ -113,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         val appResultLocal = registerForActivityResult(StartActivityForResult()) { resultActivity ->
 
             val sn = Snackbar.make(
-                binding.textView2,
+                binding.btnSearch,
                 "",
                 Snackbar.LENGTH_LONG
             )
@@ -150,7 +213,8 @@ class MainActivity : AppCompatActivity() {
             when (activityResult.resultCode) {
                 RESULT_OK -> {
                     val msg =
-                        activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                        //Arreglo de textos, get(0) obtener el primer intento
+                        activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0)
                             .toString()
                     if (msg.isNotEmpty()) {
                         val intent = Intent(
@@ -160,36 +224,29 @@ class MainActivity : AppCompatActivity() {
                             "com.google.android.googlequicksearchbox",
                             "com.google.android.googlequicksearchbox.SearchActivity"
                         )
-                        intent.putExtra(SearchManager.QUERY, msg.toString())
+                        intent.putExtra(SearchManager.QUERY, msg)
                         startActivity(intent)
                     }
                 }
-
-
                 RESULT_CANCELED -> {
                     message = "Proceso Cancelado"
-                    sn.setBackgroundTint(resources.getColor(R.color.rojito))
+                    sn.setBackgroundTint(resources.getColor(R.color.orange))
                 }
 
                 else -> {
                     message = "Resultado Erroneo"
                     sn.setBackgroundTint(resources.getColor(R.color.rojito))
                 }
-//
             }
             sn.setText(message)
             sn.show()
-
         }
 
         //Diferencia con la primera es que las 2 se van a comunicar y cuando lo hagan se va alanzar este contrato
-
         binding.btnResult.setOnClickListener {
             val resIntent = Intent(this, ResultActivity::class.java)
             appResultLocal.launch(resIntent)
         }
-
-
         binding.btnTwitter.setOnClickListener {
             val intentSpeech = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
             intentSpeech.putExtra(
@@ -199,13 +256,11 @@ class MainActivity : AppCompatActivity() {
             intentSpeech.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
             intentSpeech.putExtra(RecognizerIntent.EXTRA_PROMPT, "Di algo")
             speechToText.launch(intentSpeech)
-
         }
     }
 
     private suspend fun saveDataStore(stringData: String) {
         // it implicito cambiamos por prefs
-
         dataStore.edit { prefs ->
             prefs[stringPreferencesKey("usuario")] = stringData
             //universal unic identifier

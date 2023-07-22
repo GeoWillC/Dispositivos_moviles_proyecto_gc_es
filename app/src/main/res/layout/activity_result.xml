@@ -8,9 +8,10 @@
 
     <Button
         android:id="@+id/btnResultOk"
-        android:layout_width="142dp"
-        android:layout_height="101dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="116dp"
+        android:textSize="25sp"
         android:text="btnResultOk"
         app:layout_constraintBottom_toTopOf="@+id/btnResultFalse"
         app:layout_constraintEnd_toEndOf="parent"
