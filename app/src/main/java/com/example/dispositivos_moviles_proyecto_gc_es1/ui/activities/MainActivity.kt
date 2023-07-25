@@ -11,11 +11,13 @@ import android.location.Location
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult.*
+import androidx.appcompat.app.AlertDialog
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -29,7 +31,11 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityMain
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import com.example.dispositivosmoviles.logic.validator.LoginValidator
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +53,114 @@ class MainActivity : AppCompatActivity() {
 
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var fusedLocationProviderClient:FusedLocationProviderClient
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private lateinit var locationRequest: LocationRequest
+    private lateinit var locationCallBack: LocationCallback
+
+    private var curretnLocation : Location?= null
+
+    private val speechToText =
+        registerForActivityResult(StartActivityForResult()) { activityResult ->
+            val sn = Snackbar.make(
+                binding.textView2,
+                "",
+                Snackbar.LENGTH_LONG
+            )
+
+            var message = ""
+            when (activityResult.resultCode) {
+                RESULT_OK -> {
+                    val msg =
+                        //Arreglo de textos, get(0) obtener el primer intento
+                        activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                            ?.get(0)
+                            .toString()
+                    if (msg.isNotEmpty()) {
+                        val intent = Intent(
+                            Intent.ACTION_WEB_SEARCH
+                        )
+                        intent.setClassName(
+                            "com.google.android.googlequicksearchbox",
+                            "com.google.android.googlequicksearchbox.SearchActivity"
+                        )
+                        intent.putExtra(SearchManager.QUERY, msg)
+                        startActivity(intent)
+                    }
+                }
+
+                RESULT_CANCELED -> {
+                    message = "Proceso Cancelado"
+                    sn.setBackgroundTint(resources.getColor(R.color.orange))
+                }
+
+                else -> {
+                    message = "Resultado Erroneo"
+                    sn.setBackgroundTint(resources.getColor(R.color.rojito))
+                }
+            }
+            sn.setText(message)
+            sn.show()
+        }
+
+    @SuppressLint("MissingPermission")
+    private val location = registerForActivityResult(RequestPermission()) {
+        //Enviamos al permiso que necesitamos que se ejecute
+            isGranted: Boolean ->
+        when (isGranted) {
+            //Conceder
+            true -> {
+                val task = fusedLocationProviderClient.lastLocation
+
+                task.addOnSuccessListener { location ->
+                    val alert= AlertDialog.Builder(this)
+                    alert.apply { setTitle("Alerta")
+                        setMessage("Existe un problema de posicionamiento golbal en el sistema")
+                        setPositiveButton("OK"){
+                            //dialg es el objeto completo
+                                dialog, id-> dialog.dismiss()
+                        }
+                        setNegativeButton("Cancelar"){
+                            dialog, id -> dialog.dismiss()
+                        }
+                         setCancelable(false)
+                    }.create()
+                    alert.show()
+                    fusedLocationProviderClient.requestLocationUpdates(
+                        locationRequest,
+                        locationCallBack,
+                        Looper.getMainLooper()
+                    )
+
+//                        location.longitude
+//                        location.latitude
+//                        val a = Geocoder(this)
+//                        a.getFromLocation(location.latitude, location.longitude, 1)
+                   // val intent = Intent(Intent.ACTION_VIEW,
+                     //   Uri.parse("geo:${location.latitude},${location.longitude}"))
+                    //startActivity(intent)
+                }
+                task.addOnFailureListener{
+
+                }
+            }
+
+            //Dialogo de porque necesita el permiso, lo solicita 2 veces
+            shouldShowRequestPermissionRationale(
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) -> {
+                Snackbar.make(binding.imageView, "Cruza el permiso oe", Snackbar.LENGTH_LONG).show()
+            }
+            //Denegar
+            false -> {
+                Snackbar.make(binding.imageView, "Permiso denegado", Snackbar.LENGTH_LONG).show()
+            }
+            //Tarea ya que contiene varios elementos
+            //El usuario debe saber para que necesita ese permiso
+            //Tengo el permiso conseguido
+        }
+    }
+
 
     //Anotacion que nos permite
     @SuppressLint("MissingInflated")
@@ -56,8 +169,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
         //Variable de clase inicializada cuando se ejecute onCreate
-        fusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+        locationRequest = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            2000
+        ).setMaxUpdates(10).build()
+        locationCallBack =object: LocationCallback(){
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+
+                if(locationResult!=null){
+                    locationResult.locations.forEach{locations->
+                        curretnLocation=locations
+                        Log.d("UCEF", "Ubicacion: ${locations.latitude},"+"${locations.longitude}")
+                    }
+                }
+            }
+        }
 
     }
 
@@ -74,8 +205,13 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
+    override fun onPause() {
+        super.onPause()
+        fusedLocationProviderClient.removeLocationUpdates(locationCallBack)
+    }
+
     // Podemos crear nuestras funcionalidades en una funcion apartada e invocarla en el onCreate
-    @SuppressLint("MissingPermission")
+
     fun initClass() {
         binding.btnLogin.setOnClickListener {
 
@@ -106,53 +242,9 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        val location = registerForActivityResult(RequestPermission()){
-            //Enviamos al permiso que necesitamos que se ejecute
-            isGranted:Boolean ->
-            when(isGranted){
-                //Conceder
-                true -> {
-                    //Retorna una tarea
-                    fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-                        if(isGranted!=null){
-
-                            val a= Geocoder(this)
-                                    a.getFromLocation(it.latitude,it.longitude,1)
-
-                            Snackbar.make(binding.imageView,
-                                "${it.latitude},${it.longitude},${a}",
-                                Snackbar.LENGTH_LONG).show()
 
 
-                            val intent = Intent(Intent.ACTION_VIEW,
-                                Uri.parse("geo:${it.latitude},${it.longitude}"))
-                                startActivity(intent)
-
-                        }else {
-                            Snackbar.make(binding.imageView,
-                                "Enciende el GPS oe",
-                                Snackbar.LENGTH_LONG).show()
-                        }
-                    }
-                }
-
-                //Dialogo de porque necesita el permiso, lo solicita 2 veces
-                shouldShowRequestPermissionRationale(
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) -> {
-                    Snackbar.make(binding.imageView,"Cruza el permiso oe",Snackbar.LENGTH_LONG).show()
-                }
-                //Denegar
-                false ->{
-                    Snackbar.make(binding.imageView,"Permiso denegado",Snackbar.LENGTH_LONG).show()
-                }
-                //Tarea ya que contiene varios elementos
-                //El usuario debe saber para que necesita ese permiso
-                //Tengo el permiso conseguido
-            }
-        }
-
-        binding.btnRecuperarContra.setOnClickListener{
+        binding.btnRecuperarContra.setOnClickListener {
             location.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
 
@@ -202,45 +294,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        val speechToText = registerForActivityResult(StartActivityForResult()) { activityResult ->
-            val sn = Snackbar.make(
-                binding.textView2,
-                "",
-                Snackbar.LENGTH_LONG
-            )
-
-            var message = ""
-            when (activityResult.resultCode) {
-                RESULT_OK -> {
-                    val msg =
-                        //Arreglo de textos, get(0) obtener el primer intento
-                        activityResult.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.get(0)
-                            .toString()
-                    if (msg.isNotEmpty()) {
-                        val intent = Intent(
-                            Intent.ACTION_WEB_SEARCH
-                        )
-                        intent.setClassName(
-                            "com.google.android.googlequicksearchbox",
-                            "com.google.android.googlequicksearchbox.SearchActivity"
-                        )
-                        intent.putExtra(SearchManager.QUERY, msg)
-                        startActivity(intent)
-                    }
-                }
-                RESULT_CANCELED -> {
-                    message = "Proceso Cancelado"
-                    sn.setBackgroundTint(resources.getColor(R.color.orange))
-                }
-
-                else -> {
-                    message = "Resultado Erroneo"
-                    sn.setBackgroundTint(resources.getColor(R.color.rojito))
-                }
-            }
-            sn.setText(message)
-            sn.show()
-        }
 
         //Diferencia con la primera es que las 2 se van a comunicar y cuando lo hagan se va alanzar este contrato
         binding.btnResult.setOnClickListener {
