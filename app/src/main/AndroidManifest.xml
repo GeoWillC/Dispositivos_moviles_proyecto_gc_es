@@ -4,11 +4,9 @@
     <!-- Permisos para acceso a contenido multimedia, puede ser riesgoso pal usuario -->
     <!-- accesos a internet no requiere permiso, para descargar la img -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- ACCESS_COARSE_LOCATION:REGION //   ACCESS_FINE_LOCATION: Ubicacion exacta-->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- ACCESS_COARSE_LOCATION:REGION //   ACCESS_FINE_LOCATION: Ubicacion exacta -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".ui.utilities.Dispositivos_moviles_proyecto_gc_es1"
@@ -23,6 +21,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activities.ResultActivity"
             android:exported="false" />
         <activity
@@ -31,8 +32,9 @@
         <activity
             android:name=".ui.activities.DetailsMarvelItem"
             android:exported="false" />
+
         <activity
-            android:name=".ui.activities.MainActivity"
+            android:name=".ui.activities.CameraActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -8,10 +8,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.location.Geocoder
 import android.location.Location
+import android.media.audiofx.Equalizer.Settings
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
+import android.provider.Settings.ACTION_MANAGE_SUPERVISOR_RESTRICTED_SETTING
 import android.speech.RecognizerIntent
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,13 +32,18 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.data.connection.dao.marvel.MarvelCharsDAO
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityMainBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.LocationManager
 import com.example.dispositivosmoviles.logic.validator.LoginValidator
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.Priority
+import com.google.android.gms.location.SettingsClient
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -57,7 +65,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallBack: LocationCallback
-
+    //En esta parte no tiene contexto this no funciona
+    private lateinit var client:SettingsClient
+    //Pedimos al servicio de localizacion que active la solicitud de alta precision
+    private lateinit var locationSettingsRequest:LocationSettingsRequest
     private var curretnLocation : Location?= null
 
     private val speechToText =
@@ -108,41 +119,38 @@ class MainActivity : AppCompatActivity() {
         //Enviamos al permiso que necesitamos que se ejecute
             isGranted: Boolean ->
         when (isGranted) {
-            //Conceder
+            //Conceder location contract
             true -> {
-                val task = fusedLocationProviderClient.lastLocation
-
-                task.addOnSuccessListener { location ->
-                    val alert= AlertDialog.Builder(this)
-                    alert.apply { setTitle("Alerta")
-                        setMessage("Existe un problema de posicionamiento golbal en el sistema")
-                        setPositiveButton("OK"){
-                            //dialg es el objeto completo
-                                dialog, id-> dialog.dismiss()
+                //Comprueba que el GPS este funcionando
+                client.checkLocationSettings(locationSettingsRequest).apply {
+                    addOnSuccessListener {
+                        val task = fusedLocationProviderClient.lastLocation
+                        task.addOnSuccessListener { location ->
+                            fusedLocationProviderClient.requestLocationUpdates(
+                                locationRequest,
+                                locationCallBack,
+                                Looper.getMainLooper()
+                            )
                         }
-                        setNegativeButton("Cancelar"){
-                            dialog, id -> dialog.dismiss()
-                        }
-                         setCancelable(false)
-                    }.create()
-                    alert.show()
-                    fusedLocationProviderClient.requestLocationUpdates(
-                        locationRequest,
-                        locationCallBack,
-                        Looper.getMainLooper()
-                    )
+                    }
+                    addOnFailureListener{ex->
+                        if(ex is ResolvableApiException){
 
-//                        location.longitude
-//                        location.latitude
-//                        val a = Geocoder(this)
-//                        a.getFromLocation(location.latitude, location.longitude, 1)
-                   // val intent = Intent(Intent.ACTION_VIEW,
-                     //   Uri.parse("geo:${location.latitude},${location.longitude}"))
-                    //startActivity(intent)
-                }
-                task.addOnFailureListener{
+                            //Lanza el alert dialog con todo
+                            // listo para que se habilite el GPS
+                            //LA API MISMO SOLUCIONA
+                            ex.startResolutionForResult(
+                                this@MainActivity,
+                                LocationSettingsStatusCodes.RESOLUTION_REQUIRED
+                            )
+                        }
+
+                    }
 
                 }
+
+
+
             }
 
             //Dialogo de porque necesita el permiso, lo solicita 2 veces
@@ -165,8 +173,7 @@ class MainActivity : AppCompatActivity() {
     //Anotacion que nos permite
     @SuppressLint("MissingInflated")
     override fun onCreate(savedInstanceState: Bundle?) {
-
-        super.onCreate(savedInstanceState)
+        //Aqui si hay context
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -177,6 +184,7 @@ class MainActivity : AppCompatActivity() {
             Priority.PRIORITY_HIGH_ACCURACY,
             2000
         ).setMaxUpdates(10).build()
+
         locationCallBack =object: LocationCallback(){
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
@@ -184,14 +192,17 @@ class MainActivity : AppCompatActivity() {
                 if(locationResult!=null){
                     locationResult.locations.forEach{locations->
                         curretnLocation=locations
-                        Log.d("UCEF", "Ubicacion: ${locations.latitude},"+"${locations.longitude}")
+                        Log.d("UCEF", "Ubicacion: ${locations.latitude}," +
+                                ""+"${locations.longitude}")
                     }
                 }
             }
         }
-
+        client=LocationServices.getSettingsClient(this)
+        locationSettingsRequest=LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest).build()
+        super.onCreate(savedInstanceState)
     }
-
     // Para iniciar la funcion y evitar problemas con la inicializacion del Binding
     // Se ejecuta inmediatamente despues del onCreate
     override fun onStart() {
@@ -320,6 +331,16 @@ class MainActivity : AppCompatActivity() {
             prefs[stringPreferencesKey("session")] = UUID.randomUUID().toString()
             prefs[stringPreferencesKey("email")] = "dismov@uce.edu.ec"
         }
+    }
+
+    //Forma uno de inicializar variables
+    private fun test(){
+      //  var location=LocationManager(this)
+
+        //Envio un contexto para que la otra clase pueda inicializarse
+        var location=LocationManager()
+        location.context=this
+        location.getUserLocation()
     }
 }
 
