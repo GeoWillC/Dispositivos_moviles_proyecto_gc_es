@@ -169,7 +169,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     //Anotacion que nos permite
     @SuppressLint("MissingInflated")
     override fun onCreate(savedInstanceState: Bundle?) {
