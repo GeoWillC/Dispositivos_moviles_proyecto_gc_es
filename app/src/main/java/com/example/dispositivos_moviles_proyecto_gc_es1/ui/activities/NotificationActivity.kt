@@ -3,7 +3,9 @@ package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -52,20 +54,30 @@ class NotificationActivity : AppCompatActivity() {
     @SuppressLint("MissingPermission")
      fun sendNotification() {
          //Contruccion internar de la notificacion
-        var notif= NotificationCompat.Builder(this,CHANNEL)
-         notif.setContentTitle("Notificacion title")
-        //Notificacion con texto
-         notif.setContentText("Tienes una notificacion")
-         notif.setSmallIcon(R.drawable.marvel_icon)
-         notif.setPriority(NotificationCompat.PRIORITY_DEFAULT)
-         //Texto mas largo
-        //Texto mucho mas extenso
-         notif.setStyle(NotificationCompat.BigTextStyle().
-         bigText("Esta es una notificacion para recordar que estamos"))
-        //Envia la notificacion
+        val intent = Intent(this, CameraActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            intent,
+            PendingIntent.FLAG_MUTABLE
+        )
+
+        // Esta parte crea la notificacion
+        val noti = NotificationCompat.Builder(this, CHANNEL)
+            .setContentTitle("Primera notificacion")
+            .setContentText("Tienes una notificacion") // Este texto se muestra cuando aparece la notificacion
+            .setSmallIcon(R.drawable.marvel_icon)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setStyle(NotificationCompat.BigTextStyle().bigText("Esta es una notificacion para recordar que estamos trabajando con Android")) // Este texto se muestra cuando se abre el gestor de notificaciones
+
+        // Aqui se envia la notificacion
         with(NotificationManagerCompat.from(this)){
-             notify(1,notif.build())
-         }
+            notify(1, noti.build())
+        }
     }
 
 }
