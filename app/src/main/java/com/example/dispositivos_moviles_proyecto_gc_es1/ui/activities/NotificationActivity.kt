@@ -30,15 +30,19 @@ class NotificationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnNotification.setOnClickListener {
-            //createNotificationChannel()
+            createNotificationChannel()
             sendNotification()
         }
         binding.btnNotificationProgramada.setOnClickListener {
-            val calendar= Calendar.getInstance()
-            val hora= binding.timepicker.hour
-            val minutes=binding.timepicker.minute
+            val calendar = Calendar.getInstance()
+            val hora = binding.timepicker.hour
+            val minutes = binding.timepicker.minute
 
-            Toast.makeText(this, "La notificacion se activa a las: $hora con $minutes", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "La notificacion se activa a las: $hora con $minutes",
+                Toast.LENGTH_LONG
+            ).show()
             calendar.set(Calendar.HOUR, hora)
             calendar.set(Calendar.MINUTE, minutes)
             calendar.set(Calendar.SECOND, 0)
@@ -56,7 +60,7 @@ class NotificationActivity : AppCompatActivity() {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Canal principal1"
+            val name = "Canal principal2"
             val descriptionText = "Canal de notificaciones de variedades"
             val importance = NotificationManager.IMPORTANCE_HIGH
             //(ID DEL CANAL,name,importance)
@@ -69,6 +73,7 @@ class NotificationActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
     //Las echas se mandan como long
     private fun sendNotificationTimePicker(time: Long) {
         val myIntent = Intent(applicationContext, BroadcasterNotifications::class.java)
@@ -80,7 +85,7 @@ class NotificationActivity : AppCompatActivity() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val alarmManager=getSystemService(Context.ALARM_SERVICE)as AlarmManager
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, myPendingIntent)
 
     }
