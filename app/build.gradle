@@ -74,4 +74,6 @@ dependencies {
     //ubicacion
     implementation("com.google.android.gms:play-services-location:21.0.1")
     //Notification compact
+    //Dependencia biometrica
+    implementation "androidx.biometric:biometric-ktx:1.2.0-alpha05"
  }
