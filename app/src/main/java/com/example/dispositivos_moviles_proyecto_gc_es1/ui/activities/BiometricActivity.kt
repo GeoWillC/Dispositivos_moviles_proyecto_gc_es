@@ -39,7 +39,7 @@ class BiometricActivity : AppCompatActivity() {
             .setTitle("Titulo del Dialogo").setSubtitle("Subtitulo del dialogo")
             .setDescription("Ponga el dedo")
             .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-            .setNegativeButtonText("Cancelar").build()
+            .setNegativeButtonText("").build()
         val biometricManager = BiometricPrompt(this, executor,
             object : BiometricPrompt.AuthenticationCallback() {
                 //ctrl + o para crear los metodos

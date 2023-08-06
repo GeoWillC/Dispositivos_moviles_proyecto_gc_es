@@ -27,6 +27,7 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.DetailsMar
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities.dataStore
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.adapters.MarvelAdapter
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.viewmodels.ProgressViewModel
 import com.example.dispositivosmoviles.ui.utilities.Metodos
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.Dispatchers
@@ -121,7 +122,8 @@ class FirstFragment(value: Boolean) : Fragment() {
 
                         if ((v + p) >= t) {
                             lifecycleScope.launch((Dispatchers.IO)) {
-                                val newItems = MarvelLogic().getAllMarvelCharacters(offset, limit)
+                               //val newItems = MarvelLogic().getAllMarvelCharacters(offset, limit)
+                                  val newItems= ProgressViewModel().getMarvelChars(offset, limit)
 //                                val newItems= MarvelLogic().getMarvelCharacters(
 //                                    "spider",
 //                                    18)
@@ -158,7 +160,7 @@ class FirstFragment(value: Boolean) : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             //relleno la listaa en otro hilo y retorno
             marvelCharItems = withContext(Dispatchers.IO) {
-                return@withContext MarvelLogic().getAllMarvelCharacters(offset, limit)
+                return@withContext ProgressViewModel().getMarvelChars(offset, limit)
             }
             rvAdapter =
                 MarvelAdapter(marvelCharItems, { sendMarvelItem(it) }, { saveMarvelItem(it) })
@@ -193,7 +195,7 @@ class FirstFragment(value: Boolean) : Fragment() {
             lifecycleScope.launch(Dispatchers.Main) {
                 //relleno la listaa en otro hilo y retorno
                 marvelCharItems = withContext(Dispatchers.IO) {
-                    MarvelLogic().getInitChars(offset, limit)
+                    ProgressViewModel().getInitChars(offset, limit)
                     //Lo que estaba aqui se debe poner en el LOGIC, Saludos
                 }
 
