@@ -1,30 +1,48 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import android.content.Intent
-import android.media.audiofx.Equalizer.Settings
 import  androidx.biometric.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings.ACTION_BIOMETRIC_ENROLL
 import android.provider.Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED
 import android.util.Log
+import android.view.View
+import androidx.activity.viewModels
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.core.content.ContextCompat
-import com.example.dispositivos_moviles_proyecto_gc_es1.R
+import androidx.lifecycle.lifecycleScope
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityBiometricBinding
+import com.example.dispositivos_moviles_proyecto_gc_es1.ui.viewmodels.BiometricViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class BiometricActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBiometricBinding
-
+    private val biometricViewModel by viewModels<BiometricViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding=ActivityBiometricBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.btnAutentication.setOnClickListener {
             autenticaBiometric()
+        }
+        biometricViewModel.isLoading.observe(this){
+            isLoading->
+            if(isLoading){
+                binding.main1.visibility= View.GONE
+                binding.mainCopia.visibility= View.VISIBLE
+
+            }
+            else{
+                binding.main1.visibility= View.VISIBLE
+                binding.mainCopia.visibility= View.GONE
+            }
+        }
+        lifecycleScope.launch {
+            biometricViewModel.chargingData()
         }
 
     }

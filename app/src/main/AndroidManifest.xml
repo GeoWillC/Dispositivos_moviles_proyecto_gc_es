@@ -43,13 +43,13 @@
             android:name=".ui.activities.ResultActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.BiometricActivity"
+            android:name=".ui.activities.ActivityWithBinding"
             android:exported="false" />
         <activity
             android:name=".ui.activities.DetailsMarvelItem"
             android:exported="false" />
         <activity
-            android:name=".ui.activities.ActivityWithBinding"
+            android:name=".ui.activities.BiometricActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
