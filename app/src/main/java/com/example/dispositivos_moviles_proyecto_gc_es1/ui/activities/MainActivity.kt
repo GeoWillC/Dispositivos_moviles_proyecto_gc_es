@@ -41,6 +41,10 @@ import com.facebook.FacebookException
 import com.facebook.login.Login
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -53,6 +57,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -72,6 +77,7 @@ preferencesDataStore(name = "settings")
 
 class MainActivity : AppCompatActivity() {
 
+    private val GOOGLE_SIGNIN= 100
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -233,6 +239,15 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.btnTwitter.setOnClickListener {
+            val googleConf= GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
+
+            val googleClient:GoogleSignInClient= GoogleSignIn.getClient(this,googleConf)
+
+            googleClient.signOut()
+            startActivityForResult(googleClient.signInIntent, GOOGLE_SIGNIN)
+
+        }
 
     }
 
@@ -242,6 +257,42 @@ class MainActivity : AppCompatActivity() {
 
 
     //Iniciando sesion
+    
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode==GOOGLE_SIGNIN){
+            val task= GoogleSignIn.getSignedInAccountFromIntent(data)
+
+            try {
+                val account= task.getResult(ApiException::class.java)
+
+                if (account !=null){
+                    val credential= GoogleAuthProvider.getCredential(account.idToken,null)
+                    FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener {
+                        if(it.isSuccessful){
+                            startActivity(Intent(this, ActivityWithBinding::class.java))
+                        }else{
+                            Toast.makeText(
+                                baseContext,
+                                "Ocurrió un error.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+
+                }
+            } catch (e: ApiException){
+                Toast.makeText(
+                    baseContext,
+                    "Ocurrió un error.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+
+
+        }
+    }
 
     private fun singInWithFacebook(){
         LoginManager.getInstance().logInWithReadPermissions(this, listOf("email"))
