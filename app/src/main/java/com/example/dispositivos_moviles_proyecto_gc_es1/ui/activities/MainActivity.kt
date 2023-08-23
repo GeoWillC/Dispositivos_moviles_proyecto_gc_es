@@ -35,6 +35,12 @@ import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityMain
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.Dispositivos_moviles_proyecto_gc_es1
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.utilities.LocationManager
 import com.example.dispositivosmoviles.logic.validator.LoginValidator
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.Login
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -47,7 +53,9 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +75,8 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private lateinit var llamado: CallbackManager
 
     private lateinit var auth: FirebaseAuth
     private val TAG= "UCE"
@@ -157,9 +167,6 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-
-
-
             }
 
             //Dialogo de porque necesita el permiso, lo solicita 2 veces
@@ -186,10 +193,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = Firebase.auth
 
-        binding.btnLogin.setOnClickListener {
-            autWithFirebaseEmail(binding.txtUser.text.toString(),
-            binding.txtPassword.text.toString())
-        }
 
         //Variable de clase inicializada cuando se ejecute onCreate
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -215,40 +218,83 @@ class MainActivity : AppCompatActivity() {
         locationSettingsRequest=LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest).build()
         super.onCreate(savedInstanceState)
+
+        binding.btnLogin.setOnClickListener {
+            singInWhitEmailAndPassword(binding.txtUser.text.toString(),
+                binding.txtPassword.text.toString())
+        }
+
+        binding.btnRegistro.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
+        binding.btnFacebook.setOnClickListener {
+            singInWithFacebook()
+
+        }
+
+
     }
 
 
     //Login firebase
     //Grabando el usuario
-    private fun autWithFirebaseEmail(email:String , password:String){
-        auth.createUserWithEmailAndPassword(email, password)
-                //corrutinas con invocadores
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                     Log.d(Contants.TAG, "createUserWithEmail:success")
-                  //Se puede usar varias opciones como recargar el usuario o verificar
-                    val user = auth.currentUser
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication success.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
 
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.w(Contants.TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        baseContext,
-                        "Authentication failed.",
-                        Toast.LENGTH_SHORT,
-                    ).show()
-
-                }
-            }
-    }
 
     //Iniciando sesion
+
+    private fun singInWithFacebook(){
+        LoginManager.getInstance().logInWithReadPermissions(this, listOf("email"))
+
+        //facebook
+        llamado= CallbackManager.Factory.create()
+        val facebookCallback = object : FacebookCallback<LoginResult> {
+            override fun onSuccess(loginResult: LoginResult) {
+                loginResult?.let {
+                    val llave= it.accessToken
+                    val credentials = FacebookAuthProvider.getCredential(llave.token)
+                    FirebaseAuth.getInstance().signInWithCredential(credentials).addOnCompleteListener {
+                        if (it.isSuccessful){
+                            startActivity(Intent(this@MainActivity, ActivityWithBinding::class.java))
+                            Toast.makeText(
+                                baseContext,
+                                "Facebook Authentication success.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }else{
+                            Toast.makeText(
+                                baseContext,
+                                "Facebook Authentication failed.",
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                        }
+                    }
+                }
+
+                //startActivity(Intent(this@MainActivity, ActivityWithBinding::class.java))
+            }
+
+            override fun onCancel() {
+                // Maneja el inicio de sesión cancelado aquí
+                Toast.makeText(
+                    baseContext,
+                    "Facebook Authentication cancelada.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+
+            override fun onError(error: FacebookException) {
+                Toast.makeText(
+                    baseContext,
+                    "Facebook Authentication error.",
+                    Toast.LENGTH_SHORT,
+                ).show()
+                // Maneja errores aquí
+            }
+        }
+        LoginManager.getInstance().registerCallback(llamado, facebookCallback)
+    }
+
     private  fun singInWhitEmailAndPassword(email:String, password: String){
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
@@ -351,7 +397,7 @@ class MainActivity : AppCompatActivity() {
             location.launch(Manifest.permission.ACCESS_FINE_LOCATION)
         }
 
-        binding.btnSearch.setOnClickListener {
+        binding.btnRegistro.setOnClickListener {
 
             //Abre una url con un boton, este intent tiene un punto de partida pero no de llegada
             //con geo: se puede mandar la latitud y longitud de una pos del mapa
@@ -371,7 +417,7 @@ class MainActivity : AppCompatActivity() {
         val appResultLocal = registerForActivityResult(StartActivityForResult()) { resultActivity ->
 
             val sn = Snackbar.make(
-                binding.btnSearch,
+                binding.btnRegistro,
                 "",
                 Snackbar.LENGTH_LONG
             )
@@ -399,7 +445,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //Diferencia con la primera es que las 2 se van a comunicar y cuando lo hagan se va alanzar este contrato
-        binding.btnResult.setOnClickListener {
+        binding.btnFacebook.setOnClickListener {
             val resIntent = Intent(this, ResultActivity::class.java)
             appResultLocal.launch(resIntent)
         }
