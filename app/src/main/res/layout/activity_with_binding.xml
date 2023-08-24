@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.activities.ActivityWithBinding"
-    >
+    tools:context=".ui.activities.ActivityWithBinding">
 
     <TextView
         android:id="@+id/txtWelcome"
-        android:textSize="14sp"
-        android:textColor="@color/black"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,10 +22,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-
-        android:text="@string/app_binding_name"
-        android:textSize="40sp"
         android:gravity="center"
+        android:textSize="40sp"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -35,56 +31,47 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <AutoCompleteTextView
-        android:id="@+id/autoCompleteTextView"
-        style="@style/busqueda2"
-        android:layout_width="273dp"
-        android:layout_height="44dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="64dp"
-        android:background="@color/orange"
-        android:drawableLeft="@drawable/busqueda"
-        android:text="Buscar Artículo"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titulo" />
-
-
     <ImageButton
         android:id="@+id/imageButton2"
         android:layout_width="46dp"
         android:layout_height="49dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="64dp"
-        android:backgroundTint="@color/orange"
-        android:src="@drawable/settings"
-        app:layout_constraintStart_toEndOf="@+id/autoCompleteTextView"
+        android:backgroundTint="#F4F1BB"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titulo" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
-        app:itemIconTint="@drawable/cualquiera"
-        app:itemActiveIndicatorStyle="@style/ActiveIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:itemActiveIndicatorStyle="@style/ActiveIndicator"
+        app:itemIconTint="@drawable/cualquiera"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
+    <ImageView
+        android:id="@+id/gif3"
+        android:layout_width="360dp"
+        android:layout_height="680dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/txtWelcome"/>
+
     <FrameLayout
         android:id="@+id/fr_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginVertical="20dp"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView"
-        app:layout_constraintVertical_bias="0.552">
+        app:layout_constraintTop_toTopOf="@+id/txtWelcome"
+        app:layout_constraintVertical_bias="0.751">
 
     </FrameLayout>
 

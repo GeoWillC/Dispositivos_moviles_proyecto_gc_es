@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Dispositivos_moviles_proyecto_gc_es1</string>
-    <string name="saludo">¡Hola! Es bieno verte nuevamente</string>
+
+    <string name="facebook_app_id">2576846225786546</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">ec89ae535978caea436bf1ac60ff0cc4</string>
+    <string name="app_name">Dispositivos_moviles_proyecto_gc_es</string>
+    <string name="saludo">¡Hola! Es bueno verte nuevamente</string>
     <string name="pepe">Cancelar</string>
     <string name="palabra1">Fast and delicious food</string>
     <string name="app_binding_name">Servicios a ofrecer</string>
@@ -9,7 +13,7 @@
     <string name="app_name_pantalla2">Pedidos Online</string>
     <string name="correo">Correo</string>
     <string name="contraseña">Contraseña</string>
-    <string name="redes_sociales">O conéctese usando lasa redes sóciales</string>
+    <string name="redes_sociales">O conéctese usando las redes sóciales</string>
     <string name="menu_home">Home</string>
     <string name="menu_favs">Busqueda</string>
     <string name="menu_sear">Search</string>

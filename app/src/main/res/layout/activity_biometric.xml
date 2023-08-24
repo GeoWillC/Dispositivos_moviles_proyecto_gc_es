@@ -9,7 +9,7 @@
 
     <LinearLayout
         android:id="@+id/main1"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="Autenticación Biometrica"
+            android:text="Autenticate con tu celular"
             android:textColor="#5D737E"
             android:textSize="42sp" />
 
@@ -35,24 +35,34 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/fingerprint_48" />
+
+        <TextView
+            android:id="@+id/textSaludo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:textColor="#5D737E"
+            android:textSize="30sp" />
     </LinearLayout>
 
 
-        <LinearLayout
-            android:id="@+id/main_copia"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginHorizontal="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    <LinearLayout
+        android:id="@+id/main_copia"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <include layout="@layout/shimmer_layout" />
-            <include layout="@layout/shimmer_layout" />
-            <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
+        <include layout="@layout/shimmer_layout" />
 
-        </LinearLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

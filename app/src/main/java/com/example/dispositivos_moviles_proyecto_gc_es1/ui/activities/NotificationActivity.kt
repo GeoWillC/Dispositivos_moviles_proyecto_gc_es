@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -34,11 +35,15 @@ class NotificationActivity : AppCompatActivity() {
             sendNotification()
         }
         binding.btnNotificationProgramada.setOnClickListener {
-            val calendar= Calendar.getInstance()
-            val hora= binding.timepicker.hour
-            val minutes=binding.timepicker.minute
+            val calendar = Calendar.getInstance()
+            val hora = binding.timepicker.hour
+            val minutes = binding.timepicker.minute
 
-            Toast.makeText(this, "La notificacion se activa a las: $hora con $minutes", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                "La notificacion se activa a las: $hora con $minutes",
+                Toast.LENGTH_LONG
+            ).show()
             calendar.set(Calendar.HOUR, hora)
             calendar.set(Calendar.MINUTE, minutes)
             calendar.set(Calendar.SECOND, 0)
@@ -50,7 +55,7 @@ class NotificationActivity : AppCompatActivity() {
     //Construccion externa del canal
     val CHANNEL: String = "Notificacion 1"
 
-    //Implementar el pending y flag
+//Implementar el pending y flag
 
     private fun createNotificationChannel() {
         // Create the NotificationChannel, but only on API 26+ because
@@ -69,7 +74,9 @@ class NotificationActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
+
     //Las echas se mandan como long
+    @SuppressLint("ScheduleExactAlarm")
     private fun sendNotificationTimePicker(time: Long) {
         val myIntent = Intent(applicationContext, BroadcasterNotifications::class.java)
         //No va a hacer que cuando este abierta actualice la aplicacion a la pantalla, y si es que no esta abierta que abra una nueva (Banderas)
@@ -80,7 +87,7 @@ class NotificationActivity : AppCompatActivity() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val alarmManager=getSystemService(Context.ALARM_SERVICE)as AlarmManager
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, time, myPendingIntent)
 
     }

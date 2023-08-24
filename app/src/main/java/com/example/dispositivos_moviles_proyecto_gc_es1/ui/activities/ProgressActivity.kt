@@ -31,6 +31,7 @@ class ProgressActivity : AppCompatActivity() {
 
             Toast.makeText(this,it[0].heroe, Toast.LENGTH_SHORT).show()
             startActivity(Intent(this,NotificationActivity::class.java))
+            overridePendingTransition(R.anim.slide_in_left,R.anim.slide_in_left)
         })
 //Listener
 
@@ -48,5 +49,11 @@ class ProgressActivity : AppCompatActivity() {
             //
 
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.slide_in_left,
+            R.anim.slide_out_left);
     }
 }

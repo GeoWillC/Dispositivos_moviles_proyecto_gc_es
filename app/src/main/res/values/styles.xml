@@ -1,8 +1,8 @@
-<resources>
+<resources xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <style name="Widget.Theme.Dispositivos_moviles_proyecto_gc_es1.ButtonBar.Fullscreen" parent="">
         <item name="android:background">@color/black_overlay</item>
-        <item name="android:buttonBarStyle">?android:attr/buttonBarStyle</item>
+        <item name="android:buttonBarStyle">@style/botonPers</item>
     </style>
     <style name="Detalle" parent="">
         <item name="android:textAlignment">center</item>
@@ -11,5 +11,27 @@
         <item name="android:textStyle">bold</item>
         <item name="android:fontFamily">@font/comic_neue_light</item>
     </style>
+    <style name="Titulo" parent="">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">30dp</item>
+        <item name="textAllCaps">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Subtexto" parent="">
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="CutShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="FillButton" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">@style/CutShape</item>
+    </style>
+
 
 </resources>

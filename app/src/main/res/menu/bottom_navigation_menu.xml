@@ -19,21 +19,4 @@
         android:visible="true"
         />
 
-    <item
-        android:id="@+id/favorito"
-        android:title="@string/menu_favs"
-        android:icon="@drawable/favorite_48px"
-        android:enabled="true"
-        android:visible="true"
-
-        />
-
-    <item
-        android:id="@+id/chat"
-        android:title="@string/menu_chatgpt"
-        android:icon="@drawable/robot_2_48px"
-        android:enabled="true"
-        android:visible="true"
-        />
-
 </menu>

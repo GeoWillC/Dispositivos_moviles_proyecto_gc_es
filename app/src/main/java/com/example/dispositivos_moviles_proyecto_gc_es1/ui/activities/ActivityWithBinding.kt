@@ -1,10 +1,12 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import android.content.Intent
+import android.net.Uri
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.bumptech.glide.Glide
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityWithBindingBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.fragment.FirstFragment
@@ -48,6 +50,9 @@ class ActivityWithBinding : AppCompatActivity() {
             FirstFragment(false)
         )
         initClass()
+        var url="https://i.gifer.com/1UEW.mp4"
+        var parse: Uri = Uri.parse(url)
+        Glide.with(this).load(parse).into(binding.gif3)
     }
 
     override fun onDestroy() {
@@ -73,27 +78,6 @@ class ActivityWithBinding : AppCompatActivity() {
                         binding.frContainer.id,
                         FirstFragment(false)
                     )
-                    true
-                }
-
-                R.id.favorito -> {
-                    // Respond to navigation item 2 click
-
-                    ManagerFragment().replaceFragment(
-                        supportFragmentManager,
-                        binding.frContainer.id,
-                        SecondFragment()
-                    )
-                    true
-                }
-
-                R.id.chat -> {
-                    // Respond to navigation item 3 click
-                    var frag = ThirdFragment();
-                    val trans = supportFragmentManager.beginTransaction()
-                    trans.replace(binding.frContainer.id, frag)
-                    trans.addToBackStack(null)
-                    trans.commit()
                     true
                 }
 

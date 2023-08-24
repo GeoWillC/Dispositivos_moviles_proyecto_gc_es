@@ -1,9 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Base.Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-
+        <item name="android:windowBackground">#F4F1BB</item>
     </style>
 
     <style name="Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Base.Theme.Dispositivos_moviles_proyecto_gc_es1">
@@ -92,7 +92,7 @@
     </style>
 
     <style name="ButtonTwitter" parent="ButtonsGeneral">
-        <item name="android:backgroundTint">#1da1f2</item>
+        <item name="android:backgroundTint">#FFFFFF</item>
     </style>
 
     <style name="ButtonRecuContra" parent="ButtonsGeneral">
@@ -119,6 +119,22 @@
     </style>
     <style name="ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:color">@color/azul</item>
+    </style>
+
+    <style name="MyCustomActivityAnimation"
+        parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">
+            @anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">
+            @anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">
+            @anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">
+            @anim/slide_out_right</item>
+    </style>
+
+    <style name="botonPers" parent="Base.Theme.Dispositivos_moviles_proyecto_gc_es1">
+        <item name="android:background">@drawable/boton_personalizado</item>
     </style>
 
 </resources>

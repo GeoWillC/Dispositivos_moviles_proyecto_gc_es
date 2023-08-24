@@ -8,6 +8,7 @@ import android.provider.Settings.ACTION_BIOMETRIC_ENROLL
 import android.provider.Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -30,53 +31,73 @@ class BiometricActivity : AppCompatActivity() {
             autenticaBiometric()
         }
         biometricViewModel.isLoading.observe(this){
-            isLoading->
+                isLoading->
             if(isLoading){
                 binding.main1.visibility= View.GONE
                 binding.mainCopia.visibility= View.VISIBLE
+
 
             }
             else{
                 binding.main1.visibility= View.VISIBLE
                 binding.mainCopia.visibility= View.GONE
+                val userEmail = intent.getStringExtra("user_email")
+                binding.textSaludo.text = "Bienvenido: $userEmail"
+
             }
         }
         lifecycleScope.launch {
             biometricViewModel.chargingData()
         }
 
+
     }
 
     private fun autenticaBiometric() {
         if(checkBiometric()){
-        //Ejecutor hacer que los contectos sean locales
-        val executor = ContextCompat.getMainExecutor(this)
+            //Ejecutor hacer que los contectos sean locales
+            val executor = ContextCompat.getMainExecutor(this)
 
-        val biometricPromp = BiometricPrompt.PromptInfo.Builder()
-            //Alert que habilita la validacion mediante huella dactilar
-            .setTitle("Titulo del Dialogo").setSubtitle("Subtitulo del dialogo")
-            .setDescription("Ponga el dedo")
-            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
-            .setNegativeButtonText("").build()
-        val biometricManager = BiometricPrompt(this, executor,
-            object : BiometricPrompt.AuthenticationCallback() {
-                //ctrl + o para crear los metodos
-                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
-                    super.onAuthenticationError(errorCode, errString)
-                }
+            val biometricPromp = BiometricPrompt.PromptInfo.Builder()
+                //Alert que habilita la validacion mediante huella dactilar
+                .setTitle("Titulo del Dialogo").setSubtitle("Subtitulo del dialogo")
+                .setDescription("Ponga el dedo")
+                .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+                .setNegativeButtonText("").build()
+            val biometricManager = BiometricPrompt(this, executor,
+                object : BiometricPrompt.AuthenticationCallback() {
+                    //ctrl + o para crear los metodos
+                    override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                        super.onAuthenticationError(errorCode, errString)
 
-                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
-                    super.onAuthenticationSucceeded(result)
-                }
+                        Toast.makeText(
+                            baseContext,
+                            "Authenticacion Biometrica Erronea.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
 
-                override fun onAuthenticationFailed() {
-                    super.onAuthenticationFailed()
-                }
-            })
-        biometricManager.authenticate(biometricPromp)
-    }else{
-        Snackbar.make(binding.btnAutentication,"Noexistenrequisitos",Snackbar.LENGTH_LONG).show()
-    }
+                    }
+
+                    override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                        super.onAuthenticationSucceeded(result)
+                        startActivity(Intent(this@BiometricActivity, Principal::class.java))
+                    }
+
+                    override fun onAuthenticationFailed() {
+                        super.onAuthenticationFailed()
+
+                        Toast.makeText(
+                            baseContext,
+                            "Authenticacion Biometrica Falló.",
+                            Toast.LENGTH_SHORT,
+                        ).show()
+
+                    }
+                })
+            biometricManager.authenticate(biometricPromp)
+        }else{
+            Snackbar.make(binding.btnAutentication,"Noexistenrequisitos",Snackbar.LENGTH_LONG).show()
+        }
 
 
     }
