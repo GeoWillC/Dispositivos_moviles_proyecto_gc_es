@@ -6,7 +6,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="low_gray">#8452CA</color>
     <color name="green">#86E7B8</color>
-    <color name="fondo">#1c2334</color>
+    <color name="fondo">#000E2B</color>
     <color name="fondo2">#FBFBFB</color>
     <color name="color_letra">#BDE8D3</color>
     <color name="color_boton">#C410D6</color>
@@ -23,6 +23,10 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="botones_menu">#7ae582</color>9fffcb
+    <color name="reloj">#9fffcb</color>
+    <color name="boton1_reloj">#d8315b</color>
+
 
 
 </resources>

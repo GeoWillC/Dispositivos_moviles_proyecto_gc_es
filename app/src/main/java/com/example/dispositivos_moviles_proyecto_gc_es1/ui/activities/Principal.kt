@@ -15,7 +15,7 @@ class Principal : AppCompatActivity() {
         binding= ActivityPrincipalBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var url="https://media1.giphy.com/media/llarwdtFqG63IlqUR1/giphy.gif?cid=ecf05e478dd219fg4uhmywacrw13popo87e16m2ia70rmp3c&ep=v1_gifs_search&rid=giphy.gif&ct=g"
+        var url="https://res.cloudinary.com/zenbusiness/image/upload/v1670445040/logaster/logaster-2020-08-new-android-logo-evolution-1.gif"
         var parse: Uri = Uri.parse(url)
         Glide.with(this).load(parse).into(binding.gift1)
         binding.button.setOnClickListener{

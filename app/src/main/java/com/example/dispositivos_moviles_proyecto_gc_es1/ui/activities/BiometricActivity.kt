@@ -1,6 +1,7 @@
 package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 
 import android.content.Intent
+import android.net.Uri
 import  androidx.biometric.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +15,7 @@ import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityBiometricBinding
 import com.example.dispositivos_moviles_proyecto_gc_es1.ui.viewmodels.BiometricViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -49,7 +51,9 @@ class BiometricActivity : AppCompatActivity() {
         lifecycleScope.launch {
             biometricViewModel.chargingData()
         }
-
+        var url="https://www.raspberrypi.org/app/uploads/2018/11/KindheartedSimpleAppaloosa-size_restricted.gif"
+        var parse: Uri = Uri.parse(url)
+        Glide.with(this).load(parse).into(binding.btnAutentication)
 
     }
 

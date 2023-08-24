@@ -50,7 +50,7 @@ class ActivityWithBinding : AppCompatActivity() {
             FirstFragment(false)
         )
         initClass()
-        var url="https://i.gifer.com/1UEW.mp4"
+        var url="https://pa1.aminoapps.com/6451/18eff24619d15485d69654dca52e846529a930cc_hq.gif"
         var parse: Uri = Uri.parse(url)
         Glide.with(this).load(parse).into(binding.gif3)
     }

@@ -21,6 +21,7 @@
             android:layout_width="234dp"
             android:layout_height="51dp"
             android:layout_marginTop="44dp"
+            android:textColor="@color/white"
             android:text="Herramientas"
             android:textAlignment="center" />
 
@@ -29,6 +30,8 @@
             style="@style/Subtexto"
             android:layout_width="238dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/botones_menu"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"
             android:text="Marvel API" />
 
@@ -37,6 +40,8 @@
             style="@style/Subtexto"
             android:layout_width="236dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/botones_menu"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"
             android:text="Buscador" />
 
@@ -44,6 +49,8 @@
             android:id="@+id/busquedaVoz"
             style="@style/Subtexto"
             android:layout_width="236dp"
+            android:backgroundTint="@color/botones_menu"
+            android:textColor="@color/black"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:text="Buscador por voz" />
@@ -52,6 +59,8 @@
             android:id="@+id/mapa"
             style="@style/Subtexto"
             android:layout_width="236dp"
+            android:backgroundTint="@color/botones_menu"
+            android:textColor="@color/black"
             android:layout_height="50dp"
             android:layout_marginTop="12dp"
             android:text="Localización" />
@@ -60,6 +69,8 @@
             android:id="@+id/alarma"
             style="@style/Subtexto"
             android:layout_width="236dp"
+            android:backgroundTint="@color/botones_menu"
+            android:textColor="@color/black"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:text="Alarma" />
@@ -69,6 +80,8 @@
             style="@style/Subtexto"
             android:layout_width="236dp"
             android:layout_height="50dp"
+            android:backgroundTint="@color/botones_menu"
+            android:textColor="@color/black"
             android:layout_marginTop="16dp"
             android:text="Camara" />
 
@@ -77,6 +90,7 @@
             android:layout_width="139dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:backgroundTint="#00FFFFFF"
             android:layout_marginTop="40dp" />
 
         <TextView

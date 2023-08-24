@@ -144,7 +144,7 @@ class Herramientas : AppCompatActivity() {
         binding = ActivityHerramientasBinding.inflate(layoutInflater)
 
         //Gif
-        var url="https://media0.giphy.com/media/LESpNIDaNBUcRIPzng/giphy.gif?cid=ecf05e47jejfbv75nnvhp8j7jrqzgowpnd9chlmjelduvmso&ep=v1_gifs_search&rid=giphy.gif&ct=g"
+        var url="https://www.despiertaymira.com/wp-content/uploads/2018/06/etienne_jacob-necesary-disorder13.gif"
         var parse: Uri = Uri.parse(url)
         Glide.with(this).load(parse).into(binding.gif2)
 

@@ -1,33 +1,41 @@
 {
   "project_info": {
-    "project_number": "539325256987",
-    "project_id": "test-7c07f",
-    "storage_bucket": "test-7c07f.appspot.com"
+    "project_number": "38381123976",
+    "project_id": "practica-uce-994e5",
+    "storage_bucket": "practica-uce-994e5.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:539325256987:android:26acda640836fee6b2efbe",
+        "mobilesdk_app_id": "1:38381123976:android:0206aa4265caf6e402e23d",
         "android_client_info": {
           "package_name": "com.example.dispositivos_moviles_proyecto_gc_es1"
         }
       },
       "oauth_client": [
         {
-          "client_id": "539325256987-42u7nje2umtmq8kp9ilenboj4d4a0eco.apps.googleusercontent.com",
+          "client_id": "38381123976-28th21b19ibck3jhm10lpc5kkaf01cc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dispositivos_moviles_proyecto_gc_es1",
+            "certificate_hash": "a43cc83494296e60253a2c1d71fb561479ef4285"
+          }
+        },
+        {
+          "client_id": "38381123976-5uilt1t5iojdf9pficpesusk6qsdkdmv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA8-SXZir959iU-gjrDOwOkXur2ZK6JEXM"
+          "current_key": "AIzaSyD2SI-HspaShcIqjsITiIKlKpPzG2DvcM4"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "539325256987-42u7nje2umtmq8kp9ilenboj4d4a0eco.apps.googleusercontent.com",
+              "client_id": "38381123976-5uilt1t5iojdf9pficpesusk6qsdkdmv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

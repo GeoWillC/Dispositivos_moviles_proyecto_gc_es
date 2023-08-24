@@ -3,7 +3,7 @@
     <style name="Base.Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Theme.Material3.DayNight">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:windowBackground">#F4F1BB</item>
+        <item name="android:windowBackground">#000E2B</item>
     </style>
 
     <style name="Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Base.Theme.Dispositivos_moviles_proyecto_gc_es1">
@@ -19,13 +19,13 @@
     </style>
 
     <style name="saludo">
-        <item name="android:textColor">@color/plomo</item>
+        <item name="android:textColor">#AFADAD</item>
         <item name="android:textSize">15sp</item>
 
     </style>
 
     <style name="login">
-        <item name="android:textColor">@color/rojito</item>
+        <item name="android:textColor">@color/botones_menu</item>
         <item name="android:textSize">14sp</item>
 
     </style>
@@ -84,7 +84,7 @@
 
 
     <style name="ButtonCancel" parent="ButtonsGeneral">
-        <item name="android:backgroundTint">@color/rojito</item>
+        <item name="android:backgroundTint">@color/botones_menu</item>
     </style>
 
     <style name="ButtonFacebook" parent="ButtonsGeneral">

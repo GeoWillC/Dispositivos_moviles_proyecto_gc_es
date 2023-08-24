@@ -26,7 +26,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center"
             android:text="Autenticate con tu celular"
-            android:textColor="#5D737E"
+            android:textColor="@color/white"
             android:textSize="42sp" />
 
         <ImageView
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/fingerprint_48" />
+            />
 
         <TextView
             android:id="@+id/textSaludo"
@@ -42,8 +42,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:textColor="#5D737E"
-            android:textSize="30sp" />
+            android:textColor="@color/white"
+            android:textSize="20sp" />
     </LinearLayout>
 
 

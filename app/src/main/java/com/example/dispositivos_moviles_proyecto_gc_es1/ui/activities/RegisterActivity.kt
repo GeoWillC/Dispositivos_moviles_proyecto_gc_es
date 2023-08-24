@@ -23,7 +23,7 @@ class RegisterActivity : AppCompatActivity() {
         setContentView(binding.root)
         auth = Firebase.auth
 
-        var url = "https://i.pinimg.com/originals/e3/bd/80/e3bd8040d980928d459eb79705afbce6.gif"
+        var url = "https://image.jimcdn.com/app/cms/image/transf/none/path/s55ed47775ac1d6ad/image/i2ca314b685988370/version/1559025202/image.gif"
         var parse: Uri = Uri.parse(url)
         Glide.with(this).load(parse).into(binding.gif)
 

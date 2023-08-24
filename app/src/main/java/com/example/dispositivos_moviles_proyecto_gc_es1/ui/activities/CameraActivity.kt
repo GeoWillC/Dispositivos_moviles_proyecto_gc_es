@@ -3,10 +3,12 @@ package com.example.dispositivos_moviles_proyecto_gc_es1.ui.activities
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
+import com.bumptech.glide.Glide
 import com.example.dispositivos_moviles_proyecto_gc_es1.R
 import com.example.dispositivos_moviles_proyecto_gc_es1.databinding.ActivityCameraBinding
 
@@ -27,6 +29,10 @@ class CameraActivity : AppCompatActivity() {
             shareIntent.setType("text/plain")
             startActivity(Intent.createChooser(shareIntent,"Compartir"))
         }
+
+        var url="https://www.gifsanimados.org/data/media/65/camara-de-fotos-imagen-animada-0033.gif"
+        var parse: Uri = Uri.parse(url)
+        Glide.with(this).load(parse).into(binding.gif)
 
     }
     private val cameraResult=registerForActivityResult(ActivityResultContracts.StartActivityForResult()){result->
