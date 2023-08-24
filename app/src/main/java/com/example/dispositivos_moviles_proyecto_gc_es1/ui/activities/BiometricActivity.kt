@@ -4,10 +4,13 @@ import android.content.Intent
 import  androidx.biometric.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings.ACTION_BIOMETRIC_ENROLL
 import android.provider.Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED
 import android.util.Log
 import android.view.View
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
@@ -35,15 +38,20 @@ class BiometricActivity : AppCompatActivity() {
                 binding.main1.visibility= View.GONE
                 binding.mainCopia.visibility= View.VISIBLE
 
+
             }
             else{
                 binding.main1.visibility= View.VISIBLE
                 binding.mainCopia.visibility= View.GONE
+                val userEmail = intent.getStringExtra("user_email")
+                binding.textSaludo.text = "Bienvenido: $userEmail"
+
             }
         }
         lifecycleScope.launch {
             biometricViewModel.chargingData()
         }
+
 
     }
 
@@ -63,14 +71,30 @@ class BiometricActivity : AppCompatActivity() {
                 //ctrl + o para crear los metodos
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
+
+                    Toast.makeText(
+                        baseContext,
+                        "Authenticacion Biometrica Erronea.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+
                 }
 
                 override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
+                    startActivity(Intent(this@BiometricActivity, ActivityWithBinding::class.java))
+
                 }
 
                 override fun onAuthenticationFailed() {
                     super.onAuthenticationFailed()
+
+                    Toast.makeText(
+                        baseContext,
+                        "Authenticacion Biometrica Falló.",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+
                 }
             })
         biometricManager.authenticate(biometricPromp)
@@ -113,4 +137,7 @@ class BiometricActivity : AppCompatActivity() {
         }
         return returnValid
     }
+
+
+
 }

@@ -3,7 +3,7 @@
     <style name="Base.Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-
+        <item name="android:windowBackground">#F4F1BB</item>
     </style>
 
     <style name="Theme.Dispositivos_moviles_proyecto_gc_es1" parent="Base.Theme.Dispositivos_moviles_proyecto_gc_es1">
@@ -30,6 +30,14 @@
 
     </style>
 
+    <style name="CutShape" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+        <item name="cornerFamily">cut</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <style name="FillButton" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">@style/CutShape</item>
+    </style>
 
     <style name="botonEstilo" parent="Widget.Material3.Button">
         <item name="android:backgroundTint">@color/color_boton</item>
@@ -92,7 +100,7 @@
     </style>
 
     <style name="ButtonTwitter" parent="ButtonsGeneral">
-        <item name="android:backgroundTint">#1da1f2</item>
+        <item name="android:backgroundTint">#FFFFFF</item>
     </style>
 
     <style name="ButtonRecuContra" parent="ButtonsGeneral">

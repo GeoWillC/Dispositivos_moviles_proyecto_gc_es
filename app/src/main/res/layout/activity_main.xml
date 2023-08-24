@@ -23,15 +23,11 @@
 
     <EditText
         android:id="@+id/txt_user"
-
         android:layout_width="221dp"
         android:layout_height="46dp"
-
         android:layout_marginStart="88dp"
         android:layout_marginTop="336dp"
-        android:backgroundTint="@color/plomo"
-
-
+        android:backgroundTint="@color/black"
         android:padding="8dp"
         android:textColor="@color/black"
         android:textColorHint="@color/low_gray"
@@ -86,10 +82,10 @@
         android:layout_marginStart="76dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="88dp"
-        android:text="Twitter"
+        android:text="Gmail"
         android:textSize="17dp"
-        android:textColor="@color/white"
-        android:drawableLeft="@drawable/twitter_foreground"
+        android:textColor="@color/black"
+        android:drawableLeft="@drawable/gugol"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_facebook"
         app:layout_constraintHorizontal_bias="0.0"
@@ -190,7 +186,7 @@
         android:layout_width="300dp"
         android:layout_height="200dp"
         android:layout_marginBottom="38dp"
-        android:src="@drawable/herramientas_mov"
+        android:src="@drawable/herramientas_movs"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.438"

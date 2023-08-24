@@ -249,6 +249,10 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        binding.btnRecuperarContra.setOnClickListener{
+            startActivity(Intent(this, ForgotActivity::class.java))
+        }
+
     }
 
 
@@ -257,7 +261,7 @@ class MainActivity : AppCompatActivity() {
 
 
     //Iniciando sesion
-    
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -271,7 +275,13 @@ class MainActivity : AppCompatActivity() {
                     val credential= GoogleAuthProvider.getCredential(account.idToken,null)
                     FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener {
                         if(it.isSuccessful){
-                            startActivity(Intent(this, ActivityWithBinding::class.java))
+                            val user = auth.currentUser
+                            user?.email?.let { userEmail ->
+                                val intent = Intent(this, BiometricActivity::class.java)
+                                intent.putExtra("user_email", userEmail)
+                                startActivity(intent)
+                            }
+
                         }else{
                             Toast.makeText(
                                 baseContext,
@@ -353,9 +363,12 @@ class MainActivity : AppCompatActivity() {
                     // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success")
                     val user = auth.currentUser
+                    user?.email?.let { userEmail ->
+                        val intent = Intent(this, BiometricActivity::class.java)
+                        intent.putExtra("user_email", userEmail)
+                        startActivity(intent)
+                    }
 
-                   // updateUI(user)
-                    startActivity(Intent(this, BiometricActivity::class.java))
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
