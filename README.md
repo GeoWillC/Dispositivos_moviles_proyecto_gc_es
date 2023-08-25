@@ -18,10 +18,18 @@ Facebook impone el uso de usuarios de prueba en aplicacion no verificadas, adema
  ![](https://github.com/GeoWillC/Dispositivos_moviles_proyecto_gc_es/blob/main/resultados/Meta%20Developer.png)
 - Retrofit
 - Arquitectura de Componentes de Android (ViewModel, LiveData).
-- Retrofit.
 - Corrutinas.
 - Glide.
 - Picasso.
+
+## Funcionalidades de la aplicación.
+- Registro e ingreso al aplicativo mediante el uso de Google, Facebook y Firebase.
+- Conexión con Marvel API para búsqueda y consulta de personajes.
+- Búsqueda simple y con comando de voz a través de Google.
+- Localización del usuario en tiempo real con alta precisión en Google Maps. 
+- Alarma con notificaciones. 
+- Cámara que permite compartir las imágenes capturadas.
+
 
 ## Resultados
 |![](resultados/main.png)|![](resultados/log_in_facebook.png)|![](resultados/logi_in_google.png)|![](resultados/registro.png) |![](resultados/recuperar.png)|
@@ -32,16 +40,6 @@ Facebook impone el uso de usuarios de prueba en aplicacion no verificadas, adema
 
 |![](resultados/location.png)|![](resultados/notification.png)|![](resultados/camara.png)|
 |----------|:-------------:|:-------------:|
-
-
-
-## Funcionalidades de la aplicación.
-- Registro e ingreso al aplicativo mediante el uso de Google, Facebook y Firebase.
-- Conexión con Marvel API para búsqueda y consulta de personajes.
-- Búsqueda simple y con comando de voz a través de Google.
-- Localización del usuario en tiempo real con alta precisión en Google Maps. 
-- Alarma con notificaciones. 
-- Cámara que permite compartir las imágenes capturadas.
 
 
 
