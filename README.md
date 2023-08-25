@@ -54,7 +54,7 @@ Facebook impone el uso de usuarios de prueba en aplicacion no verificadas, adema
 
 Licencia MIT
 
-Derechos de Autor (c) 2020 Shrikanth Ravi
+Derechos de Autor (c) 2023 Conlago George & Solano Erick
 
 Por la presente se otorga permiso, de forma gratuita, a cualquier persona que obtenga una copia de este software y los archivos de documentación asociados (el "Software"), para tratar con el Software sin restricciones, incluidos, entre otros, los derechos de usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar y / o vender copias del Software, y permitir a las personas a las que se les proporcione el Software hacer lo mismo, sujeto a las siguientes condiciones:
 
